@@ -173,12 +173,18 @@ Carro Desenfileirar(Via_2* x, int faixa){
 
 }
 
-void verFaixa(Via_2* x){
+int Qtecarros(Via_2* x){
 	int i, l = 0;
 	for (i = 0; i <= x->fim; i++){
 		if (x->Faixa[i].origem != 0)
 			l++;
 	}
+	return l;
+}
+
+void verFaixa(Via_2* x){
+	int i, l;
+	l = Qtecarros(x);
 	printf("Numero de veiculos na faixa: %d", l);
 	for(i = 0; i <= x->fim; i++){
 		printf("Tipo do veiculo: %c \n",x->Faixa[i].tipov);
