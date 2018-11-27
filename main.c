@@ -43,9 +43,9 @@ int main(){
 					else{
 						if (novo.dfinal == 2){
 							if (Qtecarros(faixa_1) <= Qtecarros(faixa_2))
-								Empilhar(faixa_1, novo, 1);
+								Enfileirar(faixa_1, novo, 1);
 							else
-								Empilhar(faixa_2, novo, 2);
+								Enfileirar(faixa_2, novo, 2);
 						}
 						else{
 
@@ -55,9 +55,9 @@ int main(){
 				else{
 					if (novo.dfinal == 2){
 						if (Qtecarros(faixa_1) <= Qtecarros(faixa_2))
-							Empilhar(faixa_1, novo, 1);
+							Enfileirar(faixa_1, novo, 1);
 						else
-							Empilhar(faixa_2, novo, 2);
+							Enfileirar(faixa_2, novo, 2);
 					}
 					else{
 				
