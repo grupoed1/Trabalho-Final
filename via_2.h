@@ -35,7 +35,7 @@ void inicializar(Via_2* x){
 	x->inicio = 0;
 	x->fim = 0;
 	
-	for (i = 0; i <= x->fim; i++){
+	for (i = 0; i <= x-> Y - 1; i++){
 		x->Faixa[i].tipov = ' ';
 		x->Faixa[i].nveiculo = 0;
 		x->Faixa[i].origem = 0;
