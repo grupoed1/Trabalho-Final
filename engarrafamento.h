@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct CarroE{
+typedef struct CarroEN{
     char tipov;
     int nveiculo;
     int origem;
@@ -9,12 +9,12 @@ typedef struct CarroE{
     int dfinal;
     char estacionamento;
     int testacionamento;
-    struct CarroE *prox;
-}CarroE;
+    struct CarroEN *prox;
+}CarroEN;
 
 typedef struct Engarrafamento{
-	struct CarroE *inicio;
-    struct CarroE *fim;
+	struct CarroEN *inicio;
+    struct CarroEN *fim;
 }Engarrafamento;
 
 void iniciarEngarrafamento(Engarrafamento* f){
@@ -24,17 +24,17 @@ void iniciarEngarrafamento(Engarrafamento* f){
 
 void iniciarCarro(Carro* P){
 	P->tipov=' ';
-	P->nveiculo=' ';
-	P->origem=' ';
-	P->instante=' ';
-	P->dfinal=' ';
+	P->nveiculo=0;
+	P->origem=0;
+	P->instante=0;
+	P->dfinal=0;
 	P->estacionamento=' ';
-	P->testacionamento=' ';
+	P->testacionamento=0;
 }
 
 void entrarEngarrafamento(Engarrafamento* f,Carro c){
-     CarroE* novo;
-     novo = (CarroE*) malloc(sizeof(CarroE));
+     CarroEN* novo;
+     novo = (CarroEN*) malloc(sizeof(CarroEN));
 
     if(novo == NULL){
         printf("\nMemoria Insufiente");
@@ -51,15 +51,21 @@ void entrarEngarrafamento(Engarrafamento* f,Carro c){
     novo->estacionamento=c.estacionamento;
     novo->testacionamento=c.testacionamento;
     
-    novo->prox=NULL;
+    if(novo->tipov=='C'){
+		novo->prox=NULL;
 
-    if(f->inicio==NULL){
-        f->inicio=novo;
-    }else{
-        f->fim->prox= novo; 
-    }
-    f->fim=novo;
-    printf("\nponto 1\n");   ////////////PONTO 1
+    	if(f->inicio==NULL){
+       	    f->inicio=novo;
+    	}else{
+        	f->fim->prox= novo; 
+    	}
+    	f->fim=novo;
+	}else{
+		if(novo->tipov=='A'){
+			novo->prox=f->inicio;
+			f->inicio=novo;
+		}
+	}  
 }
 
 Carro sairEngarrafamento(Engarrafamento* P){
@@ -77,14 +83,13 @@ Carro sairEngarrafamento(Engarrafamento* P){
         C.estacionamento=P->inicio->estacionamento;
         C.testacionamento=P->inicio->testacionamento;
         
-		CarroE *aux=P->inicio;
+		CarroEN *aux=P->inicio;
 		P->inicio=P->inicio->prox;
 		if(P->inicio==NULL){
 			P->fim=NULL;
 		}
 		free(aux);
 	}
-	printf("\nponto 2\n");      //////PONTO 2
 	return C;
 }
 
@@ -94,7 +99,7 @@ void verEngarrafamento(Engarrafamento* f){
 		return;
 	}
 	
-	CarroE* atual=f->inicio;
+	CarroEN* atual=f->inicio;
 	int tamanho=0;
 	
 	while(atual!=NULL){
