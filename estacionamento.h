@@ -10,24 +10,24 @@ typedef struct {
     int dfinal;
     char estacionamento;
     int testacionamento;
-} Carro;
+} CarroES;
 
 typedef struct {
-    Carro vet[Z];
+    CarroES vet[Z];
     int topo;
 } Estacionamento;
 
-void inicializar(Estacionamento *P){
+void inicializarES(Estacionamento *P){
 	P->topo=0;
     int i;
     for(i = 0; i < Z; i++){
         P->vet[i].tipov=' ';
-		P->vet[i].nveiculo=' ';
-		P->vet[i].origem=' ';
-		P->vet[i].instante=' ';
-		P->vet[i].dfinal=' ';
+		P->vet[i].nveiculo=0;
+		P->vet[i].origem=0;
+		P->vet[i].instante=0;
+		P->vet[i].dfinal=0;
 		P->vet[i].estacionamento=' ';
-		P->vet[i].testacionamento=' ';
+		P->vet[i].testacionamento=0;
 	}
 	
 }
@@ -55,12 +55,12 @@ Carro empilhar(Estacionamento *P,Carro C){
         	P->vet[P->topo].testacionamento=C.testacionamento;
 		}
 		C.tipov=' ';
-  		C.nveiculo=' ';
-  		C.origem=' ';
-		C.instante=' ';
-		C.dfinal=' ';
+  		C.nveiculo=0;
+  		C.origem=0;
+		C.instante=0;
+		C.dfinal=0;
 		C.estacionamento=' ';
-  		C.testacionamento=' ';	
+  		C.testacionamento=0;	
   		return C;
     }
 }
@@ -79,12 +79,12 @@ Carro desempilhar(Estacionamento *P) {
         C.testacionamento=P->vet[P->topo].testacionamento;
        
         P->vet[P->topo].tipov=' ';
-  		P->vet[P->topo].nveiculo=' ';
-  		P->vet[P->topo].origem=' ';
-		P->vet[P->topo].instante=' ';
-		P->vet[P->topo].dfinal=' ';
+  		P->vet[P->topo].nveiculo=0;
+  		P->vet[P->topo].origem=0;
+		P->vet[P->topo].instante=0;
+		P->vet[P->topo].dfinal=0;
 		P->vet[P->topo].estacionamento=' ';
-  		P->vet[P->topo].testacionamento=' ';
+  		P->vet[P->topo].testacionamento=0;
 		P->topo--;
     }
     return C;
@@ -105,26 +105,58 @@ void verEstacionamento(Estacionamento e){
 	}	   	
 }
 
-void ControleEntradaE(Estacionamento* e,Carro* a,Carro* b){
-	
-	if(a->estacionamento=='S'&&b->estacionamento=='S'){
-		if(a->origem==2){
-		  *a=empilhar(e,*a);
-		  *b=empilhar(e,*b);
+void ControleEntradaES(Estacionamento* e,Carro* a,Carro* b){
+//obs: carro A é da entrada 2 e B da entrada 1	
+	if(e->topo==Z-1){
+		printf("estacionamento lotado");
+	}if(e->topo==Z-2){
+		if(a->estacionamento=='S'){
+		  	  *a=empilhar(e,*a);
 		}else{
-		  *b=empilhar(e,*b);
-		  *a=empilhar(e,*a);
-		}
-	}else{
-		if(a->tipov=='C'){
-		  *a=empilhar(e,*a);
-		}
-		if(b->tipov=='C'){
-          *a=empilhar(e,*a);
-		}
+			if(b->estacionamento=='S'){
+ 	  	  	  *b=empilhar(e,*b);
+			}
+		}	
+	}if(e->topo<Z-2){
+		if(a->estacionamento=='S'&& b->estacionamento=='S'){
+			if(a->origem==2){
+		  	  *a=empilhar(e,*a);
+		  	  *b=empilhar(e,*b);
+			}else{
+		  	  *b=empilhar(e,*b);
+		  	  *a=empilhar(e,*a);
+			}
+		}else{           
+			if(a->estacionamento=='S'){
+		  	  *a=empilhar(e,*a);
+			}
+			if(b->estacionamento=='S'){
+ 	  	  	  *b=empilhar(e,*b);
+			}
+		}	
 	}
 }
 
-void ControleSaidaE(Estacionamento* e,Carro* a,Carro* b){
-	
+Carro ControleSaidaES(Estacionamento* e){
+	Carro C;
+ 	if(e->vet[e->topo].testacionamento<=0){
+ 		C=desempilhar(e);
+		 return C; 
+	}else{
+	 	C.tipov=' ';
+  		C.nveiculo=0;
+  		C.origem=0;
+		C.instante=0;
+		C.dfinal=0;
+		C.estacionamento=' ';
+  		C.testacionamento=0;
+	}
+	 return C;
+}
+
+void atualizarEstacionamento(Estacionamento* e){
+	int i;
+	for(i=0;i<e->topo;i++){
+		e->vet[i].testacionamento--;
+	}
 }
