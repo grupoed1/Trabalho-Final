@@ -1,6 +1,5 @@
 #include "via_1.h"
 #include "estacionamento.h"
-#include "engarrafamento.h"
 
 int main(){
 	
@@ -83,6 +82,7 @@ int main(){
 		}while (p < 4 && i < strlen(carro_atual));
 		buffer[p] = '\0';
 		novo.testacionamento = atoi(buffer);
+		strcpy(buffer, "   ");
 
 	
 	return 0;
