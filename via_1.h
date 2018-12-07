@@ -3,26 +3,9 @@
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
+#include "via_2.h"
 #define MAX 40
 
-typedef struct {
-    char tipov;
-    int nveiculo;
-    int origem;
-    int instante;
-    int dfinal;
-    char estacionamento;
-    int testacionamento;
-}Carro;
-
-typedef struct{
-  char tipo;
-  int instante;
-  int duracao;
-  int via;
-  int faixa;
-  int posicao;
-}Evento;
 
 typedef struct{
   Carro Faixa1[MAX]; //Leste - Oeste
@@ -31,7 +14,7 @@ typedef struct{
   int fim;
 }Via_1;
 
-Evento defeito_v1;
+evento defeito_v1;
 int flag = 0;
 
 void inicializarVia_1(Via_1* x){
@@ -57,7 +40,7 @@ void inicializarVia_1(Via_1* x){
   }
 }
 
-bool isFull(Via_1* x, Carro faixa){
+bool isFull1(Via_1* x, Carro faixa){
   int i;
   if(faixa.origem == 1){
     for (i = 0; i < MAX; i++){
@@ -84,7 +67,7 @@ void inserirVia_1(Via_1* x, Carro veiculo){
       if(veiculo.tipov == 'A' && x->Faixa1[20].tipov == ' '){ //Ambulancia no Hospital
         x->Faixa1[20] = veiculo;
       }else{
-        if(isFull(x, veiculo)){
+        if(isFull1(x, veiculo)){
           flag = 1;
           printf("\n Pista cheia!\n");
         }else{
@@ -100,7 +83,7 @@ void inserirVia_1(Via_1* x, Carro veiculo){
       if(veiculo.tipov == 'A' && x->Faixa2[0].tipov == ' '){
         x->Faixa2[0] = veiculo;
       }else{
-        if(isFull(x, veiculo)){
+        if(isFull1(x, veiculo)){
           printf("\n Pista cheia!\n");
         }else{
           if (veiculo.tipov == 'C' && (defeito_v1.via != 1 || defeito_v1.faixa != 2 || defeito_v1.posicao != 0 || x->Faixa2[defeito_v1.posicao].nveiculo == 0))
@@ -533,7 +516,7 @@ void CicloAmb1(Via_1* x){
 }
 
 
-int Qtecarros(Via_1* x, int faixa){
+int Qtecarros1(Via_1* x, int faixa){
   int i, l = 0;
   if (faixa == 1){
     for (i = 0; i <= x->fim; i++){
@@ -550,9 +533,9 @@ int Qtecarros(Via_1* x, int faixa){
   return l;
 }
 
-void verFaixa(Via_1* x, int faixa){
+void verFaixa_v1(Via_1* x, int faixa){
   int i, l;
-  l = Qtecarros(x, faixa);
+  l = Qtecarros1(x, faixa);
   printf("Numero de veiculos na faixa: %d", l);
   if (faixa == 1){
     for(i = 0; i <= x->fim; i++){
