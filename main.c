@@ -31,7 +31,6 @@ int main(){
 		saidav2_2 = Desenfileirar(faixa_2, 2);
 		saidav1[0] = CicloVia_1(via1)[0];
 		saidav1[1] = CicloVia_1(via1)[1];
-		saidaes = ControleSaidaES(ES);
 		saidaen1 = sairEngarrafamento(EN1);
 		saidaen2 = sairEngarrafamento(EN2);
 		atualizarEstacionamento(ES);
@@ -53,6 +52,7 @@ int main(){
 		i++;
 		novo.origem = atoi(&carro_atual[i]);
 		i += 2;
+		p = 0;
 		do{
 			t = carro_atual[i];
 			if (t != ' ')
@@ -83,6 +83,117 @@ int main(){
 		buffer[p] = '\0';
 		novo.testacionamento = atoi(buffer);
 		strcpy(buffer, "   ");
+
+		if (saidaen1.dfinal == 1 || saidaen1.dfinal == 2){
+			if (saidaen1.estacionamento == 'N' && saidaen1.dfinal == 1){
+				if (ES->vet[ES->topo].dfinal == 2){
+					saidaes = ControleSaidaES(ES);
+					if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
+						Enfileirar(faixa_2, saidaes, 2);
+					else
+						Enfileirar(faixa_1, saidaes, 1);
+				}
+				inserirVia_1(via1, saidaen1);
+			}else if (saidaen1.estacionamento == 'N' && saidaen1.dfinal == 2){
+				saidaes = ControleSaidaES(ES);
+				if (saidaes.dfinal == 1)
+					inserirVia_1(via1, saidaes);
+				else if (saidaes.dfinal == 2){
+					if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
+						Enfileirar(faixa_2, saidaes, 2);
+					else
+						Enfileirar(faixa_1, saidaes, 1);
+				}
+				if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
+					Enfileirar(faixa_2, saidaen1, 2);
+				else
+					Enfileirar(faixa_1, saidaen1, 1);
+			}else if (saidaen1.estacionamento == 'S'){
+				saidaes = ControleSaidaES(ES);
+				if (saidaes.dfinal == 1)
+					inserirVia_1(via1, saidaes);
+				else if (saidaes.dfinal == 2){
+					if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
+						Enfileirar(faixa_2, saidaes, 2);
+					else
+						Enfileirar(faixa_1, saidaes, 1);
+				}
+				p = ControleEntradaES(ES, saidaen1, saidav1[0]);
+				if (p < 1){
+					if (saidaen1.dfinal == 1)
+						inserirVia_1(via1, saidaen1);
+					else if (saidaen1.dfinal == 2){
+						if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
+							Enfileirar(faixa_2, saidaen1, 2);
+						else
+							Enfileirar(faixa_1, saidaen1, 1);
+					}
+				}
+			}
+			if (novo.origem == 1)
+				entrarEngarrafamento(EN1, novo);
+		}else{
+			if (novo.origem == 1){
+				if (novo.estacionamento == 'N' && novo.dfinal == 1){
+					if (ES->vet[ES->topo].dfinal == 2){
+						saidaes = ControleSaidaES(ES);
+						if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
+							Enfileirar(faixa_2, saidaes, 2);
+						else
+							Enfileirar(faixa_1, saidaes, 1);
+					}
+					inserirVia_1(via1, novo); 
+				}else if (novo.estacionamento == 'N' && novo.dfinal == 2){
+					saidaes = ControleSaidaES(ES);
+					if (saidaes.dfinal == 1)
+						inserirVia_1(via1, saidaes);
+					else if (saidaes.dfinal == 2){
+						if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
+							Enfileirar(faixa_2, saidaes, 2);
+						else
+							Enfileirar(faixa_1, saidaes, 1);
+					}
+					if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
+						Enfileirar(faixa_2, novo, 2);
+					else
+						Enfileirar(faixa_1, novo, 1);
+				}else if (novo.estacionamento == 'S'){
+					saidaes = ControleSaidaES(ES);
+					if (saidaes.dfinal == 1)
+						inserirVia_1(via1, saidaes);
+					else if (saidaes.dfinal == 2){
+						if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
+							Enfileirar(faixa_2, saidaes, 2);
+						else
+							Enfileirar(faixa_1, saidaes, 1);
+
+					}
+					p = ControleEntradaES(ES, novo, saidav1[0]);
+					if (p < 1){
+						if (novo.dfinal == 1)
+							inserirVia_1(via1, novo);
+						else if (novo.dfinal == 2){
+							if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
+								Enfileirar(faixa_2, novo, 2);
+							else
+								Enfileirar(faixa_1, novo, 1);
+						}
+					}
+				}
+			}
+
+		}
+
+		if (saidaen2.dfinal == 1 || saidaen2.dfinal == 2){
+			inserirVia_1(via1, saidaen2);
+			if (novo.origem == 2){
+				entrarEngarrafamento(EN2, novo);
+			}
+		}else{
+			if (novo.origem == 2)
+				inserirVia_1(via1, novo);
+		}
+		//Falta controlar saidav1[0]
 
 	
 	return 0;
