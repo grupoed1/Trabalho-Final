@@ -396,9 +396,10 @@ Carro* CicloVia_1(Via_1* x){
     return aux;
   }
 
-void CicloAmb1(Via_1* x){
+Carro CicloAmb1(Via_1* x){
   int amb1 = verificarAmbulanciaFaixa1(x);
   int j;
+  Carro aux = x->Faixa1[0];
   if(defeito_v1.faixa != 1 || x->Faixa1[defeito_v1.posicao].nveiculo == 0){
       if(amb1 >= 0 && amb1 <= 20){
         for(j = 0; j <= amb1-3; j++){
@@ -407,6 +408,7 @@ void CicloAmb1(Via_1* x){
         if(amb1-3 >= 0){
           x->Faixa1[amb1-3] = x->Faixa1[amb1];
         }else{
+          aux = x->Faixa1[amb1];
           x->Faixa1[amb1].tipov = ' ';
           x->Faixa1[amb1].nveiculo = 0;
           x->Faixa1[amb1].origem = 0;
@@ -437,6 +439,7 @@ void CicloAmb1(Via_1* x){
             x->Faixa1[j-1] = x->Faixa1[j+1];
           }else{
             if(defeito_v1.posicao == j && j-1 < 0){
+              aux = x->Faixa1[j+1];
               x->Faixa1[j+1].tipov = ' ';
               x->Faixa1[j+1].nveiculo = 0;
               x->Faixa1[j+1].origem = 0;
@@ -452,6 +455,7 @@ void CicloAmb1(Via_1* x){
         if(amb1-3 >= 0){
           x->Faixa1[amb1-3] = x->Faixa1[amb1];
         }else{
+          aux = x->Faixa1[amb1];
           x->Faixa1[amb1].tipov = ' ';
           x->Faixa1[amb1].nveiculo = 0;
           x->Faixa1[amb1].origem = 0;
@@ -465,6 +469,7 @@ void CicloAmb1(Via_1* x){
             x->Faixa1[j-1] = x->Faixa1[j+1];
           }else{
             if(defeito_v1.posicao == j && j-1 < 0){
+              aux = x->Faixa1[j+1];
               x->Faixa1[j+1].tipov = ' ';
               x->Faixa1[j+1].nveiculo = 0;
               x->Faixa1[j+1].origem = 0;
@@ -491,6 +496,7 @@ void CicloAmb1(Via_1* x){
           }
           else{
             if(defeito_v1.posicao == j && j-1 < 0){
+              aux = x->Faixa1[j+1];
               x->Faixa1[j+1].tipov = ' ';
               x->Faixa1[j+1].nveiculo = 0;
               x->Faixa1[j+1].origem = 0;
