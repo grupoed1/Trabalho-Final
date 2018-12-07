@@ -51,21 +51,14 @@ void entrarEngarrafamento(Engarrafamento* f,Carro c){
     novo->estacionamento=c.estacionamento;
     novo->testacionamento=c.testacionamento;
     
-    if(novo->tipov=='C'){
-		novo->prox=NULL;
+    novo->prox=NULL;
 
-    	if(f->inicio==NULL){
-       	    f->inicio=novo;
-    	}else{
-        	f->fim->prox= novo; 
-    	}
-    	f->fim=novo;
+  	if(f->inicio==NULL){
+        f->inicio=novo;
 	}else{
-		if(novo->tipov=='A'){
-			novo->prox=f->inicio;
-			f->inicio=novo;
-		}
-	}  
+       	f->fim->prox= novo; 
+    }
+ 	f->fim=novo;
 }
 
 Carro sairEngarrafamento(Engarrafamento* P){
