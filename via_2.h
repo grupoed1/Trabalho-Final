@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "engarrafamento.h"
 #define Y 20
 
 typedef struct {
@@ -35,7 +36,7 @@ void inicializar(Via_2* x){
 	x->inicio = 0;
 	x->fim = 0;
 	
-	for (i = 0; i <= x-> Y - 1; i++){
+	for (i = 0; i <= Y - 1; i++){
 		x->Faixa[i].tipov = ' ';
 		x->Faixa[i].nveiculo = 0;
 		x->Faixa[i].origem = 0;
@@ -79,6 +80,7 @@ void Enfileirar(Via_2* x, Carro c, int faixa){
 Carro Desenfileirar(Via_2* x, int faixa){
 	int i;
 	Carro aux;
+	iniciarCarro(&aux);
 	if (isEmpty(x))
 		printf("A faixa esta vazia\n");
 	else{
@@ -197,3 +199,4 @@ void verFaixa(Via_2* x){
 		printf("\n\n");
 	}	   	
 }
+
