@@ -105,33 +105,41 @@ void verEstacionamento(Estacionamento e){
 	}	   	
 }
 
-void ControleEntradaES(Estacionamento* e,Carro* a,Carro* b){
+int ControleEntradaES(Estacionamento* e,Carro* a,Carro* b){
 //obs: carro A é da entrada 2 e B da entrada 1	
 	if(e->topo==Z-1){
 		printf("estacionamento lotado");
+		return 0;
 	}if(e->topo==Z-2){
 		if(a->estacionamento=='S'){
 		  	  *a=empilhar(e,*a);
+		  	  return 1;
 		}else{
 			if(b->estacionamento=='S'){
  	  	  	  *b=empilhar(e,*b);
+ 	  	  	  return 2;
 			}
+			return 0;
 		}	
 	}if(e->topo<Z-2){
 		if(a->estacionamento=='S'&& b->estacionamento=='S'){
 			if(a->origem==2){
 		  	  *a=empilhar(e,*a);
 		  	  *b=empilhar(e,*b);
+		  	  return 3;
 			}else{
 		  	  *b=empilhar(e,*b);
 		  	  *a=empilhar(e,*a);
+		  	  return 3;
 			}
 		}else{           
 			if(a->estacionamento=='S'){
 		  	  *a=empilhar(e,*a);
+		  	  return 1;
 			}
 			if(b->estacionamento=='S'){
  	  	  	  *b=empilhar(e,*b);
+ 	  	  	  return 2;
 			}
 		}	
 	}
