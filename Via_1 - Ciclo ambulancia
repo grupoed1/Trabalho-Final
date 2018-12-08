@@ -1,0 +1,173 @@
+int cacaAmbulancia(int indice, Via_1* x){
+	int i;
+  for(i = indice ; i <= 20; i++){
+    if(x->Faixa1[i].tipov == 'A'){
+      return i;
+    }
+  }
+return -1;
+}
+
+
+
+
+Carro CicloAmb1(Via_1* x){
+  int auxAmb = verificarAmbulanciaFaixa1(x);
+  int amb1 = auxAmb;
+  int j;
+  Carro aux = x->Faixa1[0];
+  
+  while(cacaAmbulancia(amb1, x)!=-1){ //Comando de repetição para fazer o ciclo buscar e movimentar as ambulancias
+	  
+  if(defeito_v1.faixa != 1 || x->Faixa1[defeito_v1.posicao].nveiculo == 0){
+      if(amb1 >= 0 && amb1 <= 20){
+        for(j = 0; j <= amb1-3; j++){
+        	if(x->Faixa1[j+1].tipov != 'A') //verifica se há outra ambulancia na posição próxima
+          	  x->Faixa1[j] = x->Faixa1[j+1];
+            else							//Caso exista, pula a ambulancia 
+			{								
+				if(j+2 < amb-3)
+				x->Faixa1[j] = x->Faixa1[j+2];
+				j = j+2;
+			}
+        }
+        if(amb1-3 >= 0){
+          x->Faixa1[amb1-3] = x->Faixa1[amb1];
+        }else{
+          aux = x->Faixa1[amb1];
+          x->Faixa1[amb1].tipov = ' ';
+          x->Faixa1[amb1].nveiculo = 0;
+          x->Faixa1[amb1].origem = 0;
+          x->Faixa1[amb1].instante = 0;
+          x->Faixa1[amb1].dfinal = 0;
+          x->Faixa1[amb1].estacionamento = ' ';
+          x->Faixa1[amb1].testacionamento = 0;
+        }
+        for(j = amb1; j < 20; j++){
+        	if(x->Faixa1[j+1].tipov != 'A') //Verifica se tem ambulancia na posição próxima
+          	  x->Faixa1[j] = x->Faixa1[j+1];
+            else
+			{
+				x->Faixa1[j] = x->Faixa1[j+2] // caso tenha, pula a ambulancia
+				j = j+2;
+			}
+        }
+      }else{
+        for(j = 0; j < 20; j++){
+          x->Faixa1[j] = x->Faixa1[j+1];
+        }
+        x->Faixa1[20].tipov = ' ';
+        x->Faixa1[20].nveiculo = 0;
+        x->Faixa1[20].origem = 0;
+        x->Faixa1[20].instante = 0;
+        x->Faixa1[20].dfinal = 0;
+        x->Faixa1[20].estacionamento = ' ';
+        x->Faixa1[20].testacionamento = 0;
+      }
+    }else{
+      if(amb1 >= 0 && amb1 <= 20){
+        for(j = 0; j <= amb1-3; j++){
+          if(defeito_v1.posicao == j && j-1 >= 0 && x->Faixa1[j+1].tipov != 'A'){ //Adicionado à condição, o caso de j+1 ser ambulancia
+            x->Faixa1[j-1] = x->Faixa1[j+1];
+          }else{
+            if(defeito_v1.posicao == j && j-1 < 0 && x->Faixa1[j+1].tipov != 'A'){ //Mesmo caso acima
+              aux = x->Faixa1[j+1];
+              x->Faixa1[j+1].tipov = ' ';
+              x->Faixa1[j+1].nveiculo = 0;
+              x->Faixa1[j+1].origem = 0;
+              x->Faixa1[j+1].instante = 0;
+              x->Faixa1[j+1].dfinal = 0;
+              x->Faixa1[j+1].estacionamento = ' ';
+              x->Faixa1[j+1].testacionamento = 0;
+            }else{
+            	if(x->Faixa1[j+1].tipov != 'A'){ //Verifica se tem ambulancia na posição próxima
+ 					x->Faixa1[j] = x->Faixa1[j+1];
+				}
+ 				else
+				 {
+					if(j+2 < amb1-3)				//Caso esteja, pula a ambulancia
+						x->Faixa1[j] = x->Faixa1[j+2];
+					j = j+2;
+				 }
+          }
+          }
+        }
+        if(amb1-3 >= 0){
+          x->Faixa1[amb1-3] = x->Faixa1[amb1];
+        }else{
+          aux = x->Faixa1[amb1];
+          x->Faixa1[amb1].tipov = ' ';
+          x->Faixa1[amb1].nveiculo = 0;
+          x->Faixa1[amb1].origem = 0;
+          x->Faixa1[amb1].instante = 0;
+          x->Faixa1[amb1].dfinal = 0;
+          x->Faixa1[amb1].estacionamento = ' ';
+          x->Faixa1[amb1].testacionamento = 0;
+        }
+        for(j = amb1; j < 20; j++){
+          if(defeito_v1.posicao == j && j-1 >= 0 && x->Faixa1[j+1].tipov != 'A'){//Adicionado à condição, o caso de j+1 ser ambulancia
+            x->Faixa1[j-1] = x->Faixa1[j+1];
+          }else{
+            if(defeito_v1.posicao == j && j-1 < 0 && x->Faixa1[j+1].tipov != 'A'){//Mesmo caso acima
+              aux = x->Faixa1[j+1];
+              x->Faixa1[j+1].tipov = ' ';
+              x->Faixa1[j+1].nveiculo = 0;
+              x->Faixa1[j+1].origem = 0;
+              x->Faixa1[j+1].instante = 0;
+              x->Faixa1[j+1].dfinal = 0;
+              x->Faixa1[j+1].estacionamento = ' ';
+              x->Faixa1[j+1].testacionamento = 0;
+            }else{
+            	if(x->Faixa1[j+1].tipov != 'A'){ //Verifica se tem ambulancia na posição próxima
+ 					x->Faixa1[j] = x->Faixa1[j+1];
+				}
+ 				else
+				 {
+					if(j+2 < amb1-3)				//Caso esteja, pula a ambulancia
+						x->Faixa1[j] = x->Faixa1[j+2];
+					j = j+2;
+				 }
+            
+            }
+          }
+        }
+        x->Faixa1[20].tipov = ' ';
+        x->Faixa1[20].nveiculo = 0;
+        x->Faixa1[20].origem = 0;
+        x->Faixa1[20].instante = 0;
+        x->Faixa1[20].dfinal = 0;
+        x->Faixa1[20].estacionamento = ' ';
+        x->Faixa1[20].testacionamento = 0;
+      }else{
+        for(j = 0; j < 20; j++){
+          if(defeito_v1.posicao == j && j-1 >= 0){
+            x->Faixa1[j-1] = x->Faixa1[j+1];
+          }
+          else{
+            if(defeito_v1.posicao == j && j-1 < 0){
+              aux = x->Faixa1[j+1];
+              x->Faixa1[j+1].tipov = ' ';
+              x->Faixa1[j+1].nveiculo = 0;
+              x->Faixa1[j+1].origem = 0;
+              x->Faixa1[j+1].instante = 0;
+              x->Faixa1[j+1].dfinal = 0;
+              x->Faixa1[j+1].estacionamento = ' ';
+              x->Faixa1[j+1].testacionamento = 0;
+            }else{
+            x->Faixa1[j] = x->Faixa1[j+1];
+          }
+        } 
+      }
+        x->Faixa1[20].tipov = ' ';
+        x->Faixa1[20].nveiculo = 0;
+        x->Faixa1[20].origem = 0;
+        x->Faixa1[20].instante = 0;
+        x->Faixa1[20].dfinal = 0;
+        x->Faixa1[20].estacionamento = ' ';
+        x->Faixa1[20].testacionamento = 0;
+      }
+      
+    }
+    amb1++; //adiciona mais 1 no indice, para o comando de repetição inicial andar
+  }
+}
