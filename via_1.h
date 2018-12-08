@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
-#include "via_2.h"
+#include "engarrafamento.h"
 #define MAX 40
 
 
@@ -517,8 +517,8 @@ Carro CicloAmb1(Via_1* x){
         x->Faixa1[20].estacionamento = ' ';
         x->Faixa1[20].testacionamento = 0;
       }
-      
     }
+  return aux;
 }
 
 
