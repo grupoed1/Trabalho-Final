@@ -16,12 +16,17 @@ int main(){
 	FILE* eventos;
 	FILE* saida;
 
+	long offset = 0L;
+
 	char carro_atual[23];
 	char evento_atual[18];
 	char buffer[4];
 	int i = 2, p = 0;
 	char t = '&';
 	evento e;
+
+	defeito_v1.duracao = 0;
+	defeito_v2.duracao = 0;
 
 	inicializarVia_1(via1);
 	inicializar(faixa_1);
@@ -34,68 +39,94 @@ int main(){
 	saida = fopen("saida.txt", "w");
 
 
-		if (fgets(evento_atual, 18, (FILE*) eventos) != NULL){
-			e.tipo = evento_atual[0];
-			do{
-				t = evento_atual[i];
-				if (t != ' ')
-					buffer[i - 2] = t;
-				else
-					break;
-				i++;
-			}while (i < 6);
-			e.instante = atoi(buffer);
-			strcpy(buffer, "   ");
-			i++;
-			p = 0;
-			do{
-				t = evento_atual[i];
-				if (t != ' ')
-					buffer[p] = t;
-				else
-					break;
-				i++;
-				p++;
-			}while (p < 4);
-			buffer[p] = '\0';
-			e.duracao = atoi(buffer);
-			i++;
-			e.via = atoi(&evento_atual[i]);
-			i += 2;
-			e.faixa = atoi(&evento_atual[i]);
-			i += 2;
-			strcpy(buffer, "   ");
-			p = 0;
-			do{
-				t = evento_atual[i];
-				if (t != ' ')
-					buffer[p] = t;
-				else
-					break;
-				i++;
-				p++;
-			}while (p < 2 && i < strlen(carro_atual));
-			buffer[p] = '\0';
-			e.posicao = atoi(buffer);
-			p = 0;
-			i = 2;
-			strcpy(buffer, "   ");
-			if (e.via == 1)
-				defeito_v1 = e;
-			else
-				defeito_v2 = e;
-		}
-
 
 		while(fgets(carro_atual, 23, (FILE*) veiculos) != NULL){
 			ciclo++;
 			saidav2_1 = Desenfileirar(faixa_1, 1);
 			saidav2_2 = Desenfileirar(faixa_2, 2);
-			saidav1[0] = CicloVia_1(via1)[0];
-			saidav1[1] = CicloVia_1(via1)[1];
+			if (EN2->inicio->tipov == 'A' && (via1->Faixa1[21].tipov == 'C' || via1->Faixa1[17].tipov == 'A')){
+				saidav1[0] = CicloAmb1(via1)[0];
+				saidav1[1] = CicloAmb1(via1)[1];
+			}else{
+				saidav1[0] = CicloVia_1(via1)[0];
+				saidav1[1] = CicloVia_1(via1)[1];
+			}
 			saidaen1 = sairEngarrafamento(EN1);
 			saidaen2 = sairEngarrafamento(EN2);
 			atualizarEstacionamento(ES);
+			defeito_v1.duracao--;
+			defeito_v2.duracao--;
+			if (defeito_v1.duracao <= 0){
+				defeito_v1.tipo = 'D';
+				defeito_v1.instante = 0;
+				defeito_v1.duracao = 0;
+				defeito_v1.via = 0;
+				defeito_v1.faixa = 0;
+				defeito_v1.posicao = 0;
+			}
+			if (defeito_v2.duracao <= 0){
+				defeito_v2.tipo = 'D';
+				defeito_v2.instante = 0;
+				defeito_v2.duracao = 0;
+				defeito_v2.via = 0;
+				defeito_v2.faixa = 0;
+				defeito_v2.posicao = 0;
+			}
+
+			if (fgets(evento_atual, 18, (FILE*) eventos) != NULL){
+				offset = ftell(eventos);
+				e.tipo = evento_atual[0];
+				do{
+					t = evento_atual[i];
+					if (t != ' ')
+						buffer[i - 2] = t;
+					else
+						break;
+					i++;
+				}while (i < 6);
+				e.instante = atoi(buffer);
+				strcpy(buffer, "   ");
+				i++;
+				p = 0;
+				do{
+					t = evento_atual[i];
+					if (t != ' ')
+						buffer[p] = t;
+					else
+						break;
+					i++;
+					p++;
+				}while (p < 4);
+				buffer[p] = '\0';
+				e.duracao = atoi(buffer);
+				i++;
+				e.via = atoi(&evento_atual[i]);
+				i += 2;
+				e.faixa = atoi(&evento_atual[i]);
+				i += 2;
+				strcpy(buffer, "   ");
+				p = 0;
+				do{
+					t = evento_atual[i];
+					if (t != ' ')
+						buffer[p] = t;
+					else
+						break;
+					i++;
+					p++;
+				}while (p < 2 && i < strlen(carro_atual));
+				buffer[p] = '\0';
+				e.posicao = atoi(buffer);
+				p = 0;
+				i = 2;
+				strcpy(buffer, "   ");
+				if (e.instante == ciclo && e.via == 1 && ((e.faixa == 1 && via1->Faixa1[e.posicao].tipov != ' ') ||(e.faixa == 2 && via1->Faixa2[e.posicao].tipov != ' ')))
+					defeito_v1 = e;
+				else if (e.instante == ciclo && e.via == 2 && ((e.faixa == 1 && faixa_1->Faixa[e.posicao].tipov != ' ') ||(e.faixa == 2 && faixa_2->Faixa[e.posicao].tipov != ' ')))
+					defeito_v2 = e;
+				else if (e.instante != ciclo)
+					fseek(eventos, offset, SEEK_SET);
+			}
 
 			novo.tipov = carro_atual[0];
 			do{
