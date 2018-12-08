@@ -119,9 +119,9 @@ void verEngarrafamento(Engarrafamento* f){
 }
 
 void atualizarEngarrafamento(Engarrafamento* f){
-	CarroEN* atual;
-	CarroEN* aux;
-	CarroEN* anterior;
+	CarroE* atual;
+	CarroE* aux;
+	CarroE* anterior;
 	atual=f->inicio;
 	
 	while(atual!=NULL){
