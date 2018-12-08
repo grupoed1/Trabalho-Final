@@ -1,6 +1,43 @@
 #include "via_1.h"
 #include "estacionamento.h"
 
+void verTudo(Via_1* x, Via_2* f1, Via_2* f2, Estacionamento* e){
+	int i;
+	for (i = 0; i < 14; i++){
+		printf(" |%c|\n", e->vet[i].tipov);
+	}
+	printf(" |%c|                    H\n", e->vet[Z-1].tipov);
+	printf("   ");
+	for (i = 0; i < MAX; i++){
+		printf("—");
+	}
+	printf("\n");
+	printf("   ");
+	for (i = 0; i < MAX; i++){
+		printf("%c", x->Faixa1[i].tipov);
+	}
+	printf("\n");
+	printf("   ");
+	for (i = 0; i < MAX; i++){
+		printf("—");
+	}
+	printf("\n");
+	printf("S  ");
+	for (i = 0; i < MAX; i++){
+		printf("%c", x->Faixa2[i].tipov);
+	}
+	printf("\n");
+	printf("   ");
+	for (i = 0; i < MAX; i++){
+		printf("—");
+	}
+	printf("\n");
+	for (i = 0; i < Y; i++){
+		printf(" |%c|%c|\n", f1->Faixa[i].tipov, f2->Faixa[i].tipov);
+	}
+
+}
+
 int main(){
 	
 	int ciclo = 0;
