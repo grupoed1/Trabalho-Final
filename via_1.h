@@ -97,9 +97,9 @@ void inserirVia_1(Via_1* x, Carro veiculo){
   }
 }
 
-int verificarAmbulanciaFaixa1(Via_1* v){
+int verificarAmbulanciaFaixa1(int indice, Via_1* v){
   int i;
-  for(i = 0 ; i <= 20; i++){
+  for(i = indice ; i <= 20; i++){
     if(v->Faixa1[i].tipov == 'A'){
       return i;
     }
@@ -107,9 +107,9 @@ int verificarAmbulanciaFaixa1(Via_1* v){
   return -1;
 }
 
-int verificarAmbulanciaFaixa2(Via_1* v){
+int verificarAmbulanciaFaixa2(int indice, Via_1* v){
   int i;
-  for(i=0; i <= 20; i++){
+  for(i = indice; i >=0; i--){
     if(v->Faixa2[i].tipov== 'A'){
       return i;
     }
@@ -118,16 +118,16 @@ int verificarAmbulanciaFaixa2(Via_1* v){
 }
 
 Carro* CicloVia_1(Via_1* x){
-  int j;
-  int amb1 = verificarAmbulanciaFaixa1(x);
-  int amb2 = verificarAmbulanciaFaixa2(x);
+  int j = 0, k = 0;
+  int amb1 = verificarAmbulanciaFaixa1(0, x);
+  int amb2 = verificarAmbulanciaFaixa2(20, x);
   Carro aux[2];
   aux[0] = x->Faixa1[x->inicio];
   aux[1] = x->Faixa2[MAX-1];
   x->fim = MAX - 1;
     if(defeito_v1.faixa != 1 || x->Faixa1[defeito_v1.posicao].nveiculo == 0){
-      if(amb1 >= 0){
-        for(j = 0; j <= amb1-3; j++){
+      while(amb1 >= 0){
+        for(j = k; j <= amb1-3; j++){
           x->Faixa1[j] = x->Faixa1[j+1];
         }
         if(amb1-3 >= 0){
@@ -141,24 +141,28 @@ Carro* CicloVia_1(Via_1* x){
           x->Faixa1[amb1].estacionamento = ' ';
           x->Faixa1[amb1].testacionamento = 0;
         }
-        for(j = amb1; j < MAX-1; j++){
-          x->Faixa1[j] = x->Faixa1[j+1];
+        k = amb1;
+        amb1 = verificarAmbulanciaFaixa1(amb1, x);
+      }
+      if (k > 0){
+        for(j = k; j < MAX-1; j++){
+            x->Faixa1[j] = x->Faixa1[j+1];
         }
       }else{
         for(j = 0; j < MAX-1; j++){
           x->Faixa1[j] = x->Faixa1[j+1];
         }
-        x->Faixa1[MAX - 1].tipov = ' ';
-        x->Faixa1[MAX - 1].nveiculo = 0;
-        x->Faixa1[MAX - 1].origem = 0;
-        x->Faixa1[MAX - 1].instante = 0;
-        x->Faixa1[MAX - 1].dfinal = 0;
-        x->Faixa1[MAX - 1].estacionamento = ' ';
-        x->Faixa1[MAX - 1].testacionamento = 0;
       }
+      x->Faixa1[MAX - 1].tipov = ' ';
+      x->Faixa1[MAX - 1].nveiculo = 0;
+      x->Faixa1[MAX - 1].origem = 0;
+      x->Faixa1[MAX - 1].instante = 0;
+      x->Faixa1[MAX - 1].dfinal = 0;
+      x->Faixa1[MAX - 1].estacionamento = ' ';
+      x->Faixa1[MAX - 1].testacionamento = 0;
     }else{
-      if(amb1 >= 0){
-        for(j = 0; j <= amb1-3; j++){
+      while (amb1 >= 0){
+        for(j = k; j <= amb1-3; j++){
           if(defeito_v1.posicao == j && j-1 >= 0){
             x->Faixa1[j-1] = x->Faixa1[j+1];
           }else{
@@ -187,7 +191,11 @@ Carro* CicloVia_1(Via_1* x){
           x->Faixa1[amb1].estacionamento = ' ';
           x->Faixa1[amb1].testacionamento = 0;
         }
-        for(j = amb1; j < MAX-1; j++){
+        k = amb1;
+        amb1 = verificarAmbulanciaFaixa1(amb1, x);
+      }
+      if (k > 0){
+        for(j = k; j < MAX-1; j++){
           if(defeito_v1.posicao == j && j-1 >= 0){
             x->Faixa1[j-1] = x->Faixa1[j+1];
           }else{
@@ -205,23 +213,6 @@ Carro* CicloVia_1(Via_1* x){
             }
           }
         }
-          if (defeito_v1.posicao != MAX - 1){
-            x->Faixa1[MAX-1].tipov = ' ';
-            x->Faixa1[MAX-1].nveiculo = 0;
-            x->Faixa1[MAX-1].origem = 0;
-            x->Faixa1[MAX-1].instante = 0;
-            x->Faixa1[MAX-1].dfinal = 0;
-            x->Faixa1[MAX-1].estacionamento = ' ';
-            x->Faixa1[MAX-1].testacionamento = 0;
-          }else{
-            x->Faixa1[MAX-2].tipov = ' ';
-            x->Faixa1[MAX-2].nveiculo = 0;
-            x->Faixa1[MAX-2].origem = 0;
-            x->Faixa1[MAX-2].instante = 0;
-            x->Faixa1[MAX-2].dfinal = 0;
-            x->Faixa1[MAX-2].estacionamento = ' ';
-            x->Faixa1[MAX-2].testacionamento = 0;
-          }
       }else{
         for(j = 0; j < MAX-1; j++){
           if(defeito_v1.posicao == j && j-1 >= 0){
@@ -239,10 +230,11 @@ Carro* CicloVia_1(Via_1* x){
               x->Faixa1[j+1].testacionamento = 0;
             }else{
             x->Faixa1[j] = x->Faixa1[j+1];
-          }
+            }
           }
           
         }
+      }
           if (defeito_v1.posicao != MAX - 1){
             x->Faixa1[MAX-1].tipov = ' ';
             x->Faixa1[MAX-1].nveiculo = 0;
@@ -261,101 +253,99 @@ Carro* CicloVia_1(Via_1* x){
             x->Faixa1[MAX-2].testacionamento = 0;
           }
       }
-      
-    }
     
     //Via 1 Oeste - Leste
+    k = MAX - 1;
     if(defeito_v1.faixa != 2 || x->Faixa2[defeito_v1.posicao].nveiculo == 0){
-      if(amb2 >= 0 && amb2 < 17){
-        for(j = MAX-1; j >= amb2+3; j--){
-          x->Faixa2[j] = x->Faixa2[j-1];
-        }
-        
-         x->Faixa2[amb2+3] = x->Faixa2[amb2];
+      while (amb2 >= 0){
+        if (amb2 >= 0 && amb2 < 17){
+          for(j = k; j >= amb2+3; j--){
+            x->Faixa2[j] = x->Faixa2[j-1];
+          }
+          
+           x->Faixa2[amb2+3] = x->Faixa2[amb2];
 
-        for(j = amb2; j > 0; j--){
+        }else{
+          if (amb2 >= 17){
+            x->Faixa2[amb2].tipov = ' ';
+            x->Faixa2[amb2].nveiculo = 0;
+            x->Faixa2[amb2].origem = 0;
+            x->Faixa2[amb2].instante = 0;
+            x->Faixa2[amb2].dfinal = 0;
+            x->Faixa2[amb2].estacionamento = ' ';
+            x->Faixa2[amb2].testacionamento = 0;
+          }
+          
+        }
+        k = amb2;
+        amb2 = verificarAmbulanciaFaixa2(amb2, x);
+      }
+      if (k < MAX - 1){
+        for (j = k; j > 0; j--){
           x->Faixa2[j] = x->Faixa2[j-1];
         }
       }else{
-        if (amb2 >= 17){
-          x->Faixa2[amb2].tipov = ' ';
-          x->Faixa2[amb2].nveiculo = 0;
-          x->Faixa2[amb2].origem = 0;
-          x->Faixa2[amb2].instante = 0;
-          x->Faixa2[amb2].dfinal = 0;
-          x->Faixa2[amb2].estacionamento = ' ';
-          x->Faixa2[amb2].testacionamento = 0;
-        }
         for(j = MAX-1; j > 0; j--){
-          x->Faixa2[j] = x->Faixa2[j-1];
+            x->Faixa2[j] = x->Faixa2[j-1];
         }
       }
-            x->Faixa2[0].tipov = ' ';
-            x->Faixa2[0].nveiculo = 0;
-            x->Faixa2[0].origem = 0;
-            x->Faixa2[0].instante = 0;
-            x->Faixa2[0].dfinal = 0;
-            x->Faixa2[0].estacionamento = ' ';
-            x->Faixa2[0].testacionamento = 0;
+      x->Faixa2[0].tipov = ' ';
+      x->Faixa2[0].nveiculo = 0;
+      x->Faixa2[0].origem = 0;
+      x->Faixa2[0].instante = 0;
+      x->Faixa2[0].dfinal = 0;
+      x->Faixa2[0].estacionamento = ' ';
+      x->Faixa2[0].testacionamento = 0;
     }else{
-      if(amb2 >= 0 && amb2 < 17){
-        for(j = MAX-1; j >= amb2+3; j--){
-          if(defeito_v1.posicao == j && j != MAX - 1){
-            x->Faixa2[j+1] = x->Faixa2[j-1];
-          }else if (j == MAX - 1){
-            aux[1] = x->Faixa2[j-1];
-            x->Faixa2[j-1].tipov = ' ';
-            x->Faixa2[j-1].nveiculo = 0;
-            x->Faixa2[j-1].origem = 0;
-            x->Faixa2[j-1].instante = 0;
-            x->Faixa2[j-1].dfinal = 0;
-            x->Faixa2[j-1].estacionamento = ' ';
-            x->Faixa2[j-1].testacionamento = 0;
-          }else{
-            
-            x->Faixa2[j] = x->Faixa2[j-1];
+      while (amb2 >= 0){
+        if(amb2 >= 0 && amb2 < 17){
+          for(j = MAX-1; j >= amb2+3; j--){
+            if(defeito_v1.posicao == j && j != MAX - 1){
+              x->Faixa2[j+1] = x->Faixa2[j-1];
+            }else if (j == MAX - 1){
+              aux[1] = x->Faixa2[j-1];
+              x->Faixa2[j-1].tipov = ' ';
+              x->Faixa2[j-1].nveiculo = 0;
+              x->Faixa2[j-1].origem = 0;
+              x->Faixa2[j-1].instante = 0;
+              x->Faixa2[j-1].dfinal = 0;
+              x->Faixa2[j-1].estacionamento = ' ';
+              x->Faixa2[j-1].testacionamento = 0;
+            }else{
+              
+              x->Faixa2[j] = x->Faixa2[j-1];
+            }
           }
-        }
-        if (defeito_v1.posicao != amb2+3)
-          x->Faixa2[amb2+3] = x->Faixa2[amb2];
-        else{
-          x->Faixa2[amb2+4] = x->Faixa2[amb2];
-        }
-        for(j = amb2; j > 0; j--){
-          if(defeito_v1.posicao == j){
-            x->Faixa2[j+1] = x->Faixa2[j-1];
-          }else{
-            x->Faixa2[j] = x->Faixa2[j-1];
-          }
-        }
-          if (defeito_v1.posicao != 0){
-            x->Faixa2[0].tipov = ' ';
-            x->Faixa2[0].nveiculo = 0;
-            x->Faixa2[0].origem = 0;
-            x->Faixa2[0].instante = 0;
-            x->Faixa2[0].dfinal = 0;
-            x->Faixa2[0].estacionamento = ' ';
-            x->Faixa2[0].testacionamento = 0;
-          }else{
-            x->Faixa2[1].tipov = ' ';
-            x->Faixa2[1].nveiculo = 0;
-            x->Faixa2[1].origem = 0;
-            x->Faixa2[1].instante = 0;
-            x->Faixa2[1].dfinal = 0;
-            x->Faixa2[1].estacionamento = ' ';
-            x->Faixa2[1].testacionamento = 0;
+          if (defeito_v1.posicao != amb2+3)
+            x->Faixa2[amb2+3] = x->Faixa2[amb2];
+          else{
+            x->Faixa2[amb2+4] = x->Faixa2[amb2];
           }
 
-      }else{
-        if (amb2 >= 17){
-          x->Faixa2[amb2].tipov = ' ';
-          x->Faixa2[amb2].nveiculo = 0;
-          x->Faixa2[amb2].origem = 0;
-          x->Faixa2[amb2].instante = 0;
-          x->Faixa2[amb2].dfinal = 0;
-          x->Faixa2[amb2].estacionamento = ' ';
-          x->Faixa2[amb2].testacionamento = 0;
+        }else{
+          if (amb2 >= 17){
+            x->Faixa2[amb2].tipov = ' ';
+            x->Faixa2[amb2].nveiculo = 0;
+            x->Faixa2[amb2].origem = 0;
+            x->Faixa2[amb2].instante = 0;
+            x->Faixa2[amb2].dfinal = 0;
+            x->Faixa2[amb2].estacionamento = ' ';
+            x->Faixa2[amb2].testacionamento = 0;
+          }
+        
         }
+        k = amb2;
+        amb2 = verificarAmbulanciaFaixa2(amb2, x);
+      }
+      if (k < MAX - 1){
+        for(j = k; j > 0; j--){
+            if(defeito_v1.posicao == j){
+              x->Faixa2[j+1] = x->Faixa2[j-1];
+            }else{
+              x->Faixa2[j] = x->Faixa2[j-1];
+            }
+          }
+      }else{
         for(j = MAX-1; j > 0; j--){
           if(defeito_v1.posicao == j && j != MAX - 1){
             x->Faixa2[j+1] = x->Faixa2[j-1];
@@ -371,44 +361,51 @@ Carro* CicloVia_1(Via_1* x){
           }
           else{
             x->Faixa2[j] = x->Faixa2[j-1];
-            }
           }
         }
 
-          if (defeito_v1.posicao != 0){
-              x->Faixa2[0].tipov = ' ';
-              x->Faixa2[0].nveiculo = 0;
-              x->Faixa2[0].origem = 0;
-              x->Faixa2[0].instante = 0;
-              x->Faixa2[0].dfinal = 0;
-              x->Faixa2[0].estacionamento = ' ';
-              x->Faixa2[0].testacionamento = 0;
-          }else{
-              x->Faixa2[1].tipov = ' ';
-              x->Faixa2[1].nveiculo = 0;
-              x->Faixa2[1].origem = 0;
-              x->Faixa2[1].instante = 0;
-              x->Faixa2[1].dfinal = 0;
-              x->Faixa2[1].estacionamento = ' ';
-              x->Faixa2[1].testacionamento = 0;
       }
+      
+
+      if (defeito_v1.posicao != 0){
+          x->Faixa2[0].tipov = ' ';
+          x->Faixa2[0].nveiculo = 0;
+          x->Faixa2[0].origem = 0;
+          x->Faixa2[0].instante = 0;
+          x->Faixa2[0].dfinal = 0;
+          x->Faixa2[0].estacionamento = ' ';
+          x->Faixa2[0].testacionamento = 0;
+      }else{
+          x->Faixa2[1].tipov = ' ';
+          x->Faixa2[1].nveiculo = 0;
+          x->Faixa2[1].origem = 0;
+          x->Faixa2[1].instante = 0;
+          x->Faixa2[1].dfinal = 0;
+          x->Faixa2[1].estacionamento = ' ';
+          x->Faixa2[1].testacionamento = 0;
+      }
+      
     }
     return aux;
   }
 
-Carro CicloAmb1(Via_1* x){
-  int amb1 = verificarAmbulanciaFaixa1(x);
-  int j;
-  Carro aux = x->Faixa1[0];
+Carro* CicloAmb1(Via_1* x){
+  int j, k = 0;
+  int amb1 = verificarAmbulanciaFaixa1(0, x);
+  int amb2 = verificarAmbulanciaFaixa2(20, x);
+  Carro aux[2];
+  aux[0] = x->Faixa1[x->inicio];
+  aux[1] = x->Faixa2[MAX-1];
+  x->fim = MAX - 1;
   if(defeito_v1.faixa != 1 || x->Faixa1[defeito_v1.posicao].nveiculo == 0){
-      if(amb1 >= 0 && amb1 <= 20){
+      while (amb1 >= 0){
         for(j = 0; j <= amb1-3; j++){
           x->Faixa1[j] = x->Faixa1[j+1];
         }
         if(amb1-3 >= 0){
           x->Faixa1[amb1-3] = x->Faixa1[amb1];
         }else{
-          aux = x->Faixa1[amb1];
+          aux[0] = x->Faixa1[amb1];
           x->Faixa1[amb1].tipov = ' ';
           x->Faixa1[amb1].nveiculo = 0;
           x->Faixa1[amb1].origem = 0;
@@ -417,29 +414,33 @@ Carro CicloAmb1(Via_1* x){
           x->Faixa1[amb1].estacionamento = ' ';
           x->Faixa1[amb1].testacionamento = 0;
         }
-        for(j = amb1; j < 20; j++){
+        k = amb1;
+        amb1 = verificarAmbulanciaFaixa1(amb1, x);
+      }
+      if (k > 0){
+        for(j = k; j < 20; j++){
           x->Faixa1[j] = x->Faixa1[j+1];
         }
       }else{
         for(j = 0; j < 20; j++){
           x->Faixa1[j] = x->Faixa1[j+1];
         }
-        x->Faixa1[20].tipov = ' ';
-        x->Faixa1[20].nveiculo = 0;
-        x->Faixa1[20].origem = 0;
-        x->Faixa1[20].instante = 0;
-        x->Faixa1[20].dfinal = 0;
-        x->Faixa1[20].estacionamento = ' ';
-        x->Faixa1[20].testacionamento = 0;
       }
+      x->Faixa1[20].tipov = ' ';
+      x->Faixa1[20].nveiculo = 0;
+      x->Faixa1[20].origem = 0;
+      x->Faixa1[20].instante = 0;
+      x->Faixa1[20].dfinal = 0;
+      x->Faixa1[20].estacionamento = ' ';
+      x->Faixa1[20].testacionamento = 0;
     }else{
-      if(amb1 >= 0 && amb1 <= 20){
+      while(amb1 >= 0){
         for(j = 0; j <= amb1-3; j++){
           if(defeito_v1.posicao == j && j-1 >= 0){
             x->Faixa1[j-1] = x->Faixa1[j+1];
           }else{
             if(defeito_v1.posicao == j && j-1 < 0){
-              aux = x->Faixa1[j+1];
+              aux[0] = x->Faixa1[j+1];
               x->Faixa1[j+1].tipov = ' ';
               x->Faixa1[j+1].nveiculo = 0;
               x->Faixa1[j+1].origem = 0;
@@ -455,7 +456,7 @@ Carro CicloAmb1(Via_1* x){
         if(amb1-3 >= 0){
           x->Faixa1[amb1-3] = x->Faixa1[amb1];
         }else{
-          aux = x->Faixa1[amb1];
+          aux[0] = x->Faixa1[amb1];
           x->Faixa1[amb1].tipov = ' ';
           x->Faixa1[amb1].nveiculo = 0;
           x->Faixa1[amb1].origem = 0;
@@ -464,12 +465,16 @@ Carro CicloAmb1(Via_1* x){
           x->Faixa1[amb1].estacionamento = ' ';
           x->Faixa1[amb1].testacionamento = 0;
         }
-        for(j = amb1; j < 20; j++){
+        k = amb1;
+        amb1 = verificarAmbulanciaFaixa1(amb1, x);
+      }
+      if (k > 0){
+        for(j = k; j < 20; j++){
           if(defeito_v1.posicao == j && j-1 >= 0){
             x->Faixa1[j-1] = x->Faixa1[j+1];
           }else{
             if(defeito_v1.posicao == j && j-1 < 0){
-              aux = x->Faixa1[j+1];
+              aux[0] = x->Faixa1[j+1];
               x->Faixa1[j+1].tipov = ' ';
               x->Faixa1[j+1].nveiculo = 0;
               x->Faixa1[j+1].origem = 0;
@@ -482,13 +487,6 @@ Carro CicloAmb1(Via_1* x){
             }
           }
         }
-        x->Faixa1[20].tipov = ' ';
-        x->Faixa1[20].nveiculo = 0;
-        x->Faixa1[20].origem = 0;
-        x->Faixa1[20].instante = 0;
-        x->Faixa1[20].dfinal = 0;
-        x->Faixa1[20].estacionamento = ' ';
-        x->Faixa1[20].testacionamento = 0;
       }else{
         for(j = 0; j < 20; j++){
           if(defeito_v1.posicao == j && j-1 >= 0){
@@ -496,7 +494,7 @@ Carro CicloAmb1(Via_1* x){
           }
           else{
             if(defeito_v1.posicao == j && j-1 < 0){
-              aux = x->Faixa1[j+1];
+              aux[0] = x->Faixa1[j+1];
               x->Faixa1[j+1].tipov = ' ';
               x->Faixa1[j+1].nveiculo = 0;
               x->Faixa1[j+1].origem = 0;
@@ -509,14 +507,147 @@ Carro CicloAmb1(Via_1* x){
           }
         } 
       }
-        x->Faixa1[20].tipov = ' ';
-        x->Faixa1[20].nveiculo = 0;
-        x->Faixa1[20].origem = 0;
-        x->Faixa1[20].instante = 0;
-        x->Faixa1[20].dfinal = 0;
-        x->Faixa1[20].estacionamento = ' ';
-        x->Faixa1[20].testacionamento = 0;
+    }
+    x->Faixa1[20].tipov = ' ';
+    x->Faixa1[20].nveiculo = 0;
+    x->Faixa1[20].origem = 0;
+    x->Faixa1[20].instante = 0;
+    x->Faixa1[20].dfinal = 0;
+    x->Faixa1[20].estacionamento = ' ';
+    x->Faixa1[20].testacionamento = 0;
+  }
+
+    //Via 1 Oeste - Leste
+    k = MAX - 1;
+    if(defeito_v1.faixa != 2 || x->Faixa2[defeito_v1.posicao].nveiculo == 0){
+      while (amb2 >= 0){
+        if (amb2 >= 0 && amb2 < 17){
+          for(j = k; j >= amb2+3; j--){
+            x->Faixa2[j] = x->Faixa2[j-1];
+          }
+          
+           x->Faixa2[amb2+3] = x->Faixa2[amb2];
+
+        }else{
+          if (amb2 >= 17){
+            x->Faixa2[amb2].tipov = ' ';
+            x->Faixa2[amb2].nveiculo = 0;
+            x->Faixa2[amb2].origem = 0;
+            x->Faixa2[amb2].instante = 0;
+            x->Faixa2[amb2].dfinal = 0;
+            x->Faixa2[amb2].estacionamento = ' ';
+            x->Faixa2[amb2].testacionamento = 0;
+          }
+          
+        }
+        k = amb2;
+        amb2 = verificarAmbulanciaFaixa2(amb2, x);
       }
+      if (k < MAX - 1){
+        for (j = k; j > 0; j--){
+          x->Faixa2[j] = x->Faixa2[j-1];
+        }
+      }else{
+        for(j = MAX-1; j > 0; j--){
+            x->Faixa2[j] = x->Faixa2[j-1];
+        }
+      }
+      x->Faixa2[0].tipov = ' ';
+      x->Faixa2[0].nveiculo = 0;
+      x->Faixa2[0].origem = 0;
+      x->Faixa2[0].instante = 0;
+      x->Faixa2[0].dfinal = 0;
+      x->Faixa2[0].estacionamento = ' ';
+      x->Faixa2[0].testacionamento = 0;
+    }else{
+      while (amb2 >= 0){
+        if(amb2 >= 0 && amb2 < 17){
+          for(j = MAX-1; j >= amb2+3; j--){
+            if(defeito_v1.posicao == j && j != MAX - 1){
+              x->Faixa2[j+1] = x->Faixa2[j-1];
+            }else if (j == MAX - 1){
+              aux[1] = x->Faixa2[j-1];
+              x->Faixa2[j-1].tipov = ' ';
+              x->Faixa2[j-1].nveiculo = 0;
+              x->Faixa2[j-1].origem = 0;
+              x->Faixa2[j-1].instante = 0;
+              x->Faixa2[j-1].dfinal = 0;
+              x->Faixa2[j-1].estacionamento = ' ';
+              x->Faixa2[j-1].testacionamento = 0;
+            }else{
+              
+              x->Faixa2[j] = x->Faixa2[j-1];
+            }
+          }
+          if (defeito_v1.posicao != amb2+3)
+            x->Faixa2[amb2+3] = x->Faixa2[amb2];
+          else{
+            x->Faixa2[amb2+4] = x->Faixa2[amb2];
+          }
+
+        }else{
+          if (amb2 >= 17){
+            x->Faixa2[amb2].tipov = ' ';
+            x->Faixa2[amb2].nveiculo = 0;
+            x->Faixa2[amb2].origem = 0;
+            x->Faixa2[amb2].instante = 0;
+            x->Faixa2[amb2].dfinal = 0;
+            x->Faixa2[amb2].estacionamento = ' ';
+            x->Faixa2[amb2].testacionamento = 0;
+          }
+        
+        }
+        k = amb2;
+        amb2 = verificarAmbulanciaFaixa2(amb2, x);
+      }
+      if (k < MAX - 1){
+        for(j = k; j > 0; j--){
+            if(defeito_v1.posicao == j){
+              x->Faixa2[j+1] = x->Faixa2[j-1];
+            }else{
+              x->Faixa2[j] = x->Faixa2[j-1];
+            }
+          }
+      }else{
+        for(j = MAX-1; j > 0; j--){
+          if(defeito_v1.posicao == j && j != MAX - 1){
+            x->Faixa2[j+1] = x->Faixa2[j-1];
+          }else if (j == MAX - 1){
+            aux[1] = x->Faixa2[j-1];
+            x->Faixa2[j-1].tipov = ' ';
+            x->Faixa2[j-1].nveiculo = 0;
+            x->Faixa2[j-1].origem = 0;
+            x->Faixa2[j-1].instante = 0;
+            x->Faixa2[j-1].dfinal = 0;
+            x->Faixa2[j-1].estacionamento = ' ';
+            x->Faixa2[j-1].testacionamento = 0;
+          }
+          else{
+            x->Faixa2[j] = x->Faixa2[j-1];
+          }
+        }
+
+      }
+      
+
+      if (defeito_v1.posicao != 0){
+          x->Faixa2[0].tipov = ' ';
+          x->Faixa2[0].nveiculo = 0;
+          x->Faixa2[0].origem = 0;
+          x->Faixa2[0].instante = 0;
+          x->Faixa2[0].dfinal = 0;
+          x->Faixa2[0].estacionamento = ' ';
+          x->Faixa2[0].testacionamento = 0;
+      }else{
+          x->Faixa2[1].tipov = ' ';
+          x->Faixa2[1].nveiculo = 0;
+          x->Faixa2[1].origem = 0;
+          x->Faixa2[1].instante = 0;
+          x->Faixa2[1].dfinal = 0;
+          x->Faixa2[1].estacionamento = ' ';
+          x->Faixa2[1].testacionamento = 0;
+      }
+      
     }
   return aux;
 }
