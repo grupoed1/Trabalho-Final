@@ -4,36 +4,36 @@
 void verTudo(Via_1* x, Via_2* f1, Via_2* f2, Estacionamento* e){
 	int i;
 	for (i = 0; i < 14; i++){
-		printf(" |%c|\n", e->vet[i].tipov);
+		printf("  |%c|\n", e->vet[i].tipov);
 	}
-	printf(" |%c|                    H\n", e->vet[Z-1].tipov);
-	printf("   ");
+	printf("  |%c|                    H\n", e->vet[Z-1].tipov);
+	printf("     ");
 	for (i = 0; i < MAX; i++){
 		printf("—");
 	}
 	printf("\n");
-	printf("   ");
+	printf("     ");
 	for (i = 0; i < MAX; i++){
 		printf("%c", x->Faixa1[i].tipov);
 	}
 	printf("\n");
-	printf("   ");
+	printf("     ");
 	for (i = 0; i < MAX; i++){
 		printf("—");
 	}
 	printf("\n");
-	printf("S  ");
+	printf("S    ");
 	for (i = 0; i < MAX; i++){
 		printf("%c", x->Faixa2[i].tipov);
 	}
 	printf("\n");
-	printf("   ");
+	printf("     ");
 	for (i = 0; i < MAX; i++){
 		printf("—");
 	}
 	printf("\n");
 	for (i = 0; i < Y; i++){
-		printf(" |%c|%c|\n", f1->Faixa[i].tipov, f2->Faixa[i].tipov);
+		printf(" |%c|%c|\n", f1->Faixa[Y- 1- i].tipov, f2->Faixa[Y - 1 - i].tipov);
 	}
 
 }
@@ -75,13 +75,11 @@ int main(){
 	veiculos = fopen("veiculos.txt", "r");
 	saida = fopen("saida.txt", "w");
 
-
-
 		while(fgets(carro_atual, 23, (FILE*) veiculos) != NULL){
 			ciclo++;
 			saidav2_1 = Desenfileirar(faixa_1, 1);
 			saidav2_2 = Desenfileirar(faixa_2, 2);
-			if (EN2->inicio->tipov == 'A' && (via1->Faixa1[21].tipov == 'C' || via1->Faixa1[17].tipov == 'A')){
+			if (EN2->inicio != NULL && EN2->inicio->tipov == 'A' && (via1->Faixa1[21].tipov == 'C' || via1->Faixa1[17].tipov == 'A')){
 				saidav1[0] = CicloAmb1(via1)[0];
 				saidav1[1] = CicloAmb1(via1)[1];
 			}else{
@@ -344,6 +342,7 @@ int main(){
 			if (saidav2_2.tipov != ' '){
 				fprintf(saida, "%c %d %d\n", saidav2_2.tipov, saidav2_2.nveiculo, ciclo);
 			}
+
 		}
 
 
