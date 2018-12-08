@@ -117,3 +117,32 @@ void verEngarrafamento(Engarrafamento* f){
 		atual=atual->prox;
 	}
 }
+
+void atualizarEngarrafamento(Engarrafamento* f){
+	CarroEN* atual;
+	CarroEN* aux;
+	CarroEN* anterior;
+	atual=f->inicio;
+	
+	while(atual!=NULL){
+		if(atual->tipov=='C'){
+			anterior=atual;
+			
+			while(anterior->prox->tipov=='A' || anterior==NULL){
+				if(anterior==NULL){
+					return;
+				}
+				if(anterior->prox->tipov=='A'){
+					aux=anterior->prox;
+					anterior->prox=aux->prox;
+					aux->prox=f->inicio;
+					f->inicio=aux;
+					atual=f->inicio;
+					break;
+				}
+				anterior=anterior->prox;
+			}
+		}
+		atual=atual->prox;
+	}
+}
