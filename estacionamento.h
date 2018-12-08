@@ -143,6 +143,7 @@ int ControleEntradaES(Estacionamento* e,Carro* a,Carro* b){
 			}
 		}	
 	}
+	return 0;
 }
 
 Carro ControleSaidaES(Estacionamento* e){
