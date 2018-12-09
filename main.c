@@ -60,7 +60,8 @@ int main(){
 	char buffer[4];
 	int i = 2, p = 0;
 	char t = '&';
-	char* r = fgets(carro_atual, 23, (FILE*) veiculos);
+	char* r;
+	
 	evento e;
 
 	defeito_v1.duracao = 0;
@@ -75,6 +76,7 @@ int main(){
 	eventos = fopen("eventos.txt", "r");
 	veiculos = fopen("veiculos.txt", "r");
 	saida = fopen("saida.txt", "w");
+	r = fgets(carro_atual, 23, (FILE*) veiculos);
 
 		while(r != NULL || Qtecarros(faixa_1) != 0 || Qtecarros(faixa_2) != 0 || Qtecarros1(via1, 1) != 0 || Qtecarros1(via1, 2) != 0 || ES->topo != 0){
 			ciclo++;
