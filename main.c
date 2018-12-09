@@ -60,6 +60,7 @@ int main(){
 	char buffer[4];
 	int i = 2, p = 0;
 	char t = '&';
+	char* r = fgets(carro_atual, 23, (FILE*) veiculos);
 	evento e;
 
 	defeito_v1.duracao = 0;
@@ -75,7 +76,7 @@ int main(){
 	veiculos = fopen("veiculos.txt", "r");
 	saida = fopen("saida.txt", "w");
 
-		while(fgets(carro_atual, 23, (FILE*) veiculos) != NULL){
+		while(r != NULL || Qtecarros(faixa_1) != 0 || Qtecarros(faixa_2) != 0 || Qtecarros1(via1, 1) != 0 || Qtecarros1(via1, 2) != 0 || ES->topo != 0){
 			ciclo++;
 			saidav2_1 = Desenfileirar(faixa_1, 1);
 			saidav2_2 = Desenfileirar(faixa_2, 2);
@@ -86,6 +87,8 @@ int main(){
 				saidav1[0] = CicloVia_1(via1)[0];
 				saidav1[1] = CicloVia_1(via1)[1];
 			}
+			atualizarEngarrafamento(EN1);
+			atualizarEngarrafamento(EN2);
 			saidaen1 = sairEngarrafamento(EN1);
 			saidaen2 = sairEngarrafamento(EN2);
 			atualizarEstacionamento(ES);
@@ -163,52 +166,65 @@ int main(){
 					fseek(eventos, offset, SEEK_SET);
 			}
 
-			novo.tipov = carro_atual[0];
-			do{
-				t = carro_atual[i];
-				if (t != ' ')
-					buffer[i - 2] = t;
-				else
-					break;
+			if (r != NULL){
+				offset = ftell(veiculos);
+				novo.tipov = carro_atual[0];
+				do{
+					t = carro_atual[i];
+					if (t != ' ')
+						buffer[i - 2] = t;
+					else
+						break;
+					i++;
+				}while (i < 6);
+				novo.nveiculo = atoi(buffer);
+				strcpy(buffer, "   ");
 				i++;
-			}while (i < 6);
-			novo.nveiculo = atoi(buffer);
-			strcpy(buffer, "   ");
-			i++;
-			novo.origem = atoi(&carro_atual[i]);
-			i += 2;
-			p = 0;
-			do{
-				t = carro_atual[i];
-				if (t != ' ')
-					buffer[p] = t;
-				else
-					break;
+				novo.origem = atoi(&carro_atual[i]);
+				i += 2;
+				p = 0;
+				do{
+					t = carro_atual[i];
+					if (t != ' ')
+						buffer[p] = t;
+					else
+						break;
+					i++;
+					p++;
+				}while (p < 4);
+				buffer[p] = '\0';
+				novo.instante = atoi(buffer);
 				i++;
-				p++;
-			}while (p < 4);
-			buffer[p] = '\0';
-			novo.instante = atoi(buffer);
-			i++;
-			novo.dfinal = atoi(&carro_atual[i]);
-			i += 2;
-			novo.estacionamento = carro_atual[i];
-			i += 2;
-			strcpy(buffer, "   ");
-			p = 0;
-			do{
-				t = carro_atual[i];
-				if (t != ' ')
-					buffer[p] = t;
-				else
-					break;
-				i++;
-				p++;
-			}while (p < 4 && i < strlen(carro_atual));
-			buffer[p] = '\0';
-			novo.testacionamento = atoi(buffer);
-			strcpy(buffer, "   ");
-			p = - 1;
+				novo.dfinal = atoi(&carro_atual[i]);
+				i += 2;
+				novo.estacionamento = carro_atual[i];
+				i += 2;
+				strcpy(buffer, "   ");
+				p = 0;
+				do{
+					t = carro_atual[i];
+					if (t != ' ')
+						buffer[p] = t;
+					else
+						break;
+					i++;
+					p++;
+				}while (p < 4 && i < strlen(carro_atual));
+				buffer[p] = '\0';
+				novo.testacionamento = atoi(buffer);
+				strcpy(buffer, "   ");
+				p = - 1;
+				if (novo.instante != ciclo){
+					novo.tipov = ' ';
+					novo.nveiculo = 0;
+					novo.origem = 0;
+					novo.instante = 0;
+					novo.dfinal = 0;
+					novo.estacionamento = ' ';
+					novo.testacionamento = 0;
+					fseek(veiculos, offset, SEEK_SET);
+				}
+			}
 
 			if (saidaen1.dfinal == 1 || saidaen1.dfinal == 2){
 				if (saidaen1.estacionamento == 'N' && saidaen1.dfinal == 1){
@@ -259,10 +275,10 @@ int main(){
 						}
 					}
 				}
-				if (novo.origem == 1)
+				if (r != NULL && novo.origem == 1)
 					entrarEngarrafamento(EN1, novo);
 			}else{
-				if (novo.origem == 1){
+				if (r != NULL && novo.origem == 1){
 					if (novo.estacionamento == 'N' && novo.dfinal == 1){
 						if (ES->vet[ES->topo].dfinal == 2){
 							saidaes = ControleSaidaES(ES);
@@ -325,11 +341,11 @@ int main(){
 
 			if (saidaen2.dfinal == 1 || saidaen2.dfinal == 2){
 				inserirVia_1(via1, saidaen2);
-				if (novo.origem == 2){
+				if (r != NULL && novo.origem == 2){
 					entrarEngarrafamento(EN2, novo);
 				}
 			}else{
-				if (novo.origem == 2)
+				if (r != NULL && novo.origem == 2)
 					inserirVia_1(via1, novo);
 			}
 
@@ -342,6 +358,8 @@ int main(){
 			if (saidav2_2.tipov != ' '){
 				fprintf(saida, "%c %d %d\n", saidav2_2.tipov, saidav2_2.nveiculo, ciclo);
 			}
+
+			r = fgets(carro_atual, 23, (FILE*) veiculos);
 
 		}
 
