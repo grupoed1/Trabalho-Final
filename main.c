@@ -93,8 +93,6 @@ int main(){
 				saidav1[0] = subst[0];
 				saidav1[1] = subst[1];
 			}
-			atualizarEngarrafamento(EN1);
-			atualizarEngarrafamento(EN2);
 			saidaen1 = sairEngarrafamento(EN1);
 			if (saidaen1.tipov != ' ')
 				flag1 = 1;
@@ -237,7 +235,9 @@ int main(){
 			}
 
 			if (saidaen1.dfinal == 1 || saidaen1.dfinal == 2){
-				if (saidaen1.estacionamento == 'N' && saidaen1.dfinal == 1){
+				if (saidaen1.tipov == 'A')
+					inserirVia_1(via1, saidaen1);
+				else if (saidaen1.estacionamento == 'N' && saidaen1.dfinal == 1){
 					if (ES->vet[ES->topo].dfinal == 2){
 						saidaes = ControleSaidaES(ES);
 						if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
@@ -285,11 +285,14 @@ int main(){
 						}
 					}
 				}
-				if (r != NULL && novo.origem == 1)
+				if (r != NULL && novo.origem == 1){
 					entrarEngarrafamento(EN1, novo);
+				}
 			}else{
 				if (r != NULL && novo.origem == 1){
-					if (novo.estacionamento == 'N' && novo.dfinal == 1){
+					if (novo.tipov == 'A')
+						inserirVia_1(via1, novo);
+					else if (novo.estacionamento == 'N' && novo.dfinal == 1){
 						if (ES->vet[ES->topo].dfinal == 2){
 							saidaes = ControleSaidaES(ES);
 							if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
@@ -339,9 +342,9 @@ int main(){
 					}
 				}
 			}
-			if (novo.origem == 1)
+			if (r != NULL && novo.origem == 1)
 				flag1 = 1;
-			if (novo.origem == 2)
+			if (r != NULL && novo.origem == 2)
 				flag2 = 1;
 			if (saidav1[0].estacionamento == 'S' && p == -1){
 				ControleEntradaES(ES, &saidaen1, &saidav1[0]);
@@ -355,12 +358,17 @@ int main(){
 
 			if (saidaen2.dfinal == 1 || saidaen2.dfinal == 2){
 				inserirVia_1(via1, saidaen2);
-				if (r != NULL && novo.origem == 2){
+				if ((r != NULL && novo.origem == 2 && novo.tipov == 'C') || (r != NULL && novo.tipov == 'A' && novo.origem == 2 && via1->Faixa1[20].tipov != ' ')){
 					entrarEngarrafamento(EN2, novo);
-				}
-			}else{
-				if (r != NULL && novo.origem == 2)
+				}else if (r != NULL && novo.tipov == 'A' && novo.origem == 2)
 					inserirVia_1(via1, novo);
+			}else{
+				if (r != NULL && novo.origem == 2){
+					if (novo.tipov == 'C' || via1->Faixa1[20].tipov == ' ')
+						inserirVia_1(via1, novo);
+					else
+						entrarEngarrafamento(EN2, novo);
+				}
 			}
 
 			while (r != NULL && novo.instante == ciclo){
@@ -424,10 +432,13 @@ int main(){
 						fseek(veiculos, -strlen(carro_atual), SEEK_CUR);
 					}else{
 						if (novo.origem == 1){
-							if (flag1 == 1)
+							if (flag1 == 1){
 								entrarEngarrafamento(EN1, novo);
+							}
 							else{
-								if (novo.estacionamento == 'N' && novo.dfinal == 1){
+								if (novo.tipov == 'A')
+									inserirVia_1(via1, novo);
+								else if (novo.estacionamento == 'N' && novo.dfinal == 1){
 									if (ES->vet[ES->topo].dfinal == 2){
 										saidaes = ControleSaidaES(ES);
 										if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
@@ -515,12 +526,15 @@ int main(){
 				fprintf(saida, "%c %d %d\n", saidav2_2.tipov, saidav2_2.nveiculo, ciclo);
 			}
 
+			atualizarEngarrafamento(EN1);
+			atualizarEngarrafamento(EN2);
+
+
 			r = fgets(carro_atual, 23, (FILE*) veiculos);
 
 			verTudo(via1, faixa_1, faixa_2, ES);
 
 		}
-
 
 	
 	return 0;
