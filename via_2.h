@@ -29,6 +29,7 @@ typedef struct{
 } Via_2;
 
 evento defeito_v2;
+int Qtecarros(Via_2* x);
 
 void inicializar(Via_2* x){
 	int i;
@@ -80,14 +81,15 @@ Carro Desenfileirar(Via_2* x, int faixa){
 	int i;
 	Carro aux;
 	aux.tipov=' ';
-	aux.nveiculo=' ';
-	aux.origem=' ';
-	aux.instante=' ';
-	aux.dfinal=' ';
+	aux.nveiculo= 0;
+	aux.origem= 0;
+	aux.instante= 0;
+	aux.dfinal= 0;
 	aux.estacionamento=' ';
-	aux.testacionamento=' ';
-	if (isEmpty(x))
+	aux.testacionamento= 0;
+	if (Qtecarros(x) == 0){
 		printf("A faixa esta vazia\n");
+	}
 	else{
 		if (defeito_v2.faixa != faixa || x->Faixa[defeito_v2.posicao].origem == 0){
 			aux = x->Faixa[x->inicio];
@@ -177,7 +179,6 @@ Carro Desenfileirar(Via_2* x, int faixa){
 		}
 	}
 	return aux;
-
 }
 
 int Qtecarros(Via_2* x){
@@ -204,4 +205,3 @@ void verFaixa(Via_2* x){
 		printf("\n\n");
 	}	   	
 }
-
