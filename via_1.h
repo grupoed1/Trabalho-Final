@@ -63,7 +63,7 @@ bool isFull1(Via_1* x, Carro faixa){
 void inserirVia_1(Via_1* x, Carro veiculo){
   switch(veiculo.origem)
   {
-    case 1: //sentido Leste - Oeste (FAIXA 1)
+    case 2: //sentido Leste - Oeste (FAIXA 1)
       if(veiculo.tipov == 'A' && x->Faixa1[20].tipov == ' '){ //Ambulancia no Hospital
         x->Faixa1[20] = veiculo;
       }else{
@@ -79,7 +79,7 @@ void inserirVia_1(Via_1* x, Carro veiculo){
       }
       x->fim = MAX-1; //obs
       break;
-    case 2: //Sentido Oeste - Leste (FAIXA 2)
+    case 1: //Sentido Oeste - Leste (FAIXA 2)
       if(veiculo.tipov == 'A' && x->Faixa2[0].tipov == ' '){
         x->Faixa2[0] = veiculo;
       }else{
