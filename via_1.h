@@ -254,7 +254,7 @@ Carro* CicloVia_1(Via_1* x){
           }
       }
     
-    //Via 1 Oeste - Leste
+    //Via 2 Oeste - Leste
     k = MAX - 1;
     if(defeito_v1.faixa != 2 || x->Faixa2[defeito_v1.posicao].nveiculo == 0){
       while (amb2 >= 0){
@@ -514,7 +514,7 @@ Carro* CicloAmb1(Via_1* x){
     x->Faixa1[20].testacionamento = 0;
   }
 
-    //Via 1 Oeste - Leste
+    //Via 2 Oeste - Leste
     k = MAX - 1;
     if(defeito_v1.faixa != 2 || x->Faixa2[defeito_v1.posicao].nveiculo == 0){
       while (amb2 >= 0){
