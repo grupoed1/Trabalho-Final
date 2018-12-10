@@ -56,7 +56,7 @@ int main(){
 	char carro_atual[23];
 	char evento_atual[18];
 	char buffer[4];
-	int i = 2, p = -1, flag1 = 0, flag2 = 0;
+	int i = 2, p = -1, flag1 = 0, flag2 = 0, evento_f = 0;
 	char t = '&';
 	char* r;
 	Carro* subst = (Carro*) malloc(sizeof(Carro)*2);
@@ -83,6 +83,7 @@ int main(){
 			saidav2_2 = Desenfileirar(faixa_2, 2);
 			flag1 = 0;
 			flag2 = 0;
+			evento_f = 0;
 			p = -1;
 			if (EN2->inicio != NULL && EN2->inicio->tipov == 'A' && (via1->Faixa1[21].tipov == 'C' || via1->Faixa1[17].tipov == 'A')){
 				subst = CicloAmb1(via1);
@@ -120,6 +121,7 @@ int main(){
 				defeito_v2.posicao = 0;
 			}
 			if (fgets(evento_atual, 18, (FILE*) eventos) != NULL){
+				evento_f = 1;
 				i = 2;
 				e.tipo = evento_atual[0];
 				do{
@@ -166,12 +168,6 @@ int main(){
 				p = 0;
 				i = 2;
 				strcpy(buffer, "   ");
-				if (e.instante == ciclo && e.via == 1 && ((e.faixa == 1 && via1->Faixa1[e.posicao].tipov != ' ') ||(e.faixa == 2 && via1->Faixa2[e.posicao].tipov != ' ')))
-					defeito_v1 = e;
-				else if (e.instante == ciclo && e.via == 2 && ((e.faixa == 1 && faixa_1->Faixa[e.posicao].tipov != ' ') ||(e.faixa == 2 && faixa_2->Faixa[e.posicao].tipov != ' ')))
-					defeito_v2 = e;
-				else if (e.instante != ciclo)
-					fseek(eventos, -strlen(evento_atual), SEEK_CUR);
 			}
 
 			if (r != NULL){
@@ -515,6 +511,13 @@ int main(){
 					inserirVia_1(via1, saidaes);
 				}
 			}
+
+			if (e.instante == ciclo && e.via == 1 && ((e.faixa == 1 && via1->Faixa1[e.posicao].tipov != ' ') ||(e.faixa == 2 && via1->Faixa2[e.posicao].tipov != ' ')))
+				defeito_v1 = e;
+			else if (e.instante == ciclo && e.via == 2 && ((e.faixa == 1 && faixa_1->Faixa[e.posicao].tipov != ' ') ||(e.faixa == 2 && faixa_2->Faixa[e.posicao].tipov != ' ')))
+				defeito_v2 = e;
+			else if (e.instante != ciclo)
+				fseek(eventos, -strlen(evento_atual), SEEK_CUR);
 
 			if (saidav1[1].tipov != ' '){
 				fprintf(saida, "%c %d %d\n", saidav1[1].tipov, saidav1[1].nveiculo, ciclo);
