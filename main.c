@@ -53,14 +53,13 @@ int main(){
 	FILE* eventos;
 	FILE* saida;
 
-	long offset = 0L;
-
 	char carro_atual[23];
 	char evento_atual[18];
 	char buffer[4];
-	int i = 2, p = 0, flag1 = 0, flag2 = 0;
+	int i = 2, p = -1, flag1 = 0, flag2 = 0;
 	char t = '&';
 	char* r;
+	Carro* subst = (Carro*) malloc(sizeof(Carro)*2);
 	
 	evento e;
 
@@ -78,18 +77,21 @@ int main(){
 	saida = fopen("saida.txt", "w");
 	r = fgets(carro_atual, 23, (FILE*) veiculos);
 
-		while(r != NULL || Qtecarros(faixa_1) != 0 || Qtecarros(faixa_2) != 0 || Qtecarros1(via1, 1) != 0 || Qtecarros1(via1, 2) != 0 || ES->topo != 0){
+		while(r != NULL || Qtecarros(faixa_1) != 0 || Qtecarros(faixa_2) != 0 || Qtecarros1(via1, 1) != 0 || Qtecarros1(via1, 2) != 0 || ES->vet[ES->topo].tipov != ' '){
 			ciclo++;
 			saidav2_1 = Desenfileirar(faixa_1, 1);
 			saidav2_2 = Desenfileirar(faixa_2, 2);
 			flag1 = 0;
 			flag2 = 0;
+			p = -1;
 			if (EN2->inicio != NULL && EN2->inicio->tipov == 'A' && (via1->Faixa1[21].tipov == 'C' || via1->Faixa1[17].tipov == 'A')){
-				saidav1[0] = CicloAmb1(via1)[0];
-				saidav1[1] = CicloAmb1(via1)[1];
+				subst = CicloAmb1(via1);
+				saidav1[0] = subst[0];
+				saidav1[1] = subst[1];
 			}else{
-				saidav1[0] = CicloVia_1(via1)[0];
-				saidav1[1] = CicloVia_1(via1)[1];
+				subst = CicloVia_1(via1);
+				saidav1[0] = subst[0];
+				saidav1[1] = subst[1];
 			}
 			atualizarEngarrafamento(EN1);
 			atualizarEngarrafamento(EN2);
@@ -100,6 +102,7 @@ int main(){
 			if (saidaen2.tipov != ' ')
 				flag2 = 1;
 			atualizarEstacionamento(ES);
+			iniciarCarro(&saidaes);
 			defeito_v1.duracao--;
 			defeito_v2.duracao--;
 			if (defeito_v1.duracao <= 0){
@@ -118,9 +121,8 @@ int main(){
 				defeito_v2.faixa = 0;
 				defeito_v2.posicao = 0;
 			}
-
 			if (fgets(evento_atual, 18, (FILE*) eventos) != NULL){
-				offset = ftell(eventos);
+				i = 2;
 				e.tipo = evento_atual[0];
 				do{
 					t = evento_atual[i];
@@ -160,7 +162,7 @@ int main(){
 						break;
 					i++;
 					p++;
-				}while (p < 2 && i < strlen(carro_atual));
+				}while (p < 2 && i < strlen(evento_atual));
 				buffer[p] = '\0';
 				e.posicao = atoi(buffer);
 				p = 0;
@@ -171,11 +173,11 @@ int main(){
 				else if (e.instante == ciclo && e.via == 2 && ((e.faixa == 1 && faixa_1->Faixa[e.posicao].tipov != ' ') ||(e.faixa == 2 && faixa_2->Faixa[e.posicao].tipov != ' ')))
 					defeito_v2 = e;
 				else if (e.instante != ciclo)
-					fseek(eventos, offset, SEEK_SET);
+					fseek(eventos, -strlen(evento_atual), SEEK_CUR);
 			}
 
 			if (r != NULL){
-				offset = ftell(veiculos);
+				i = 2;
 				novo.tipov = carro_atual[0];
 				do{
 					t = carro_atual[i];
@@ -230,7 +232,7 @@ int main(){
 					novo.dfinal = 0;
 					novo.estacionamento = ' ';
 					novo.testacionamento = 0;
-					fseek(veiculos, offset, SEEK_SET);
+					fseek(veiculos, -strlen(carro_atual), SEEK_CUR);
 				}
 			}
 
@@ -341,9 +343,9 @@ int main(){
 				flag1 = 1;
 			if (novo.origem == 2)
 				flag2 = 1;
-
-			if (saidav1[0].estacionamento == 'S' && p == -1)
+			if (saidav1[0].estacionamento == 'S' && p == -1){
 				ControleEntradaES(ES, &saidaen1, &saidav1[0]);
+			}
 			else if ((saidav1[0].estacionamento == 'S' && (p == 0 || p == 1)) || saidav1[0].estacionamento == 'N'){
 				if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
 					Enfileirar(faixa_2, saidav1[0], 2);
@@ -363,8 +365,8 @@ int main(){
 
 			while (r != NULL && novo.instante == ciclo){
 				r = fgets(carro_atual, 23, (FILE*) veiculos);
+				i = 2;
 				if (r != NULL){
-					offset = ftell(veiculos);
 					novo.tipov = carro_atual[0];
 					do{
 						t = carro_atual[i];
@@ -419,7 +421,7 @@ int main(){
 						novo.dfinal = 0;
 						novo.estacionamento = ' ';
 						novo.testacionamento = 0;
-						fseek(veiculos, offset, SEEK_SET);
+						fseek(veiculos, -strlen(carro_atual), SEEK_CUR);
 					}else{
 						if (novo.origem == 1){
 							if (flag1 == 1)
@@ -490,6 +492,19 @@ int main(){
 
 			}
 
+			if (saidaes.tipov == ' '){
+				if (ES->vet[ES->topo].dfinal == 2 && ((faixa_1->Faixa[Y - 1].tipov == ' ' && (defeito_v2.faixa != 1 || defeito_v2.posicao != Y - 1)) || (faixa_1->Faixa[Y - 2].tipov == ' ' && (defeito_v2.faixa == 1 && defeito_v2.posicao == Y - 1)) || (faixa_2->Faixa[Y - 1].tipov == ' ' && (defeito_v2.faixa != 2 || defeito_v2.posicao != Y - 1)) || (faixa_2->Faixa[Y - 2].tipov == ' ' && (defeito_v2.faixa == 2 && defeito_v2.posicao == Y - 1)))){
+					saidaes = ControleSaidaES(ES);
+					if (Qtecarros(faixa_2) <= Qtecarros(faixa_1))
+						Enfileirar(faixa_2, saidaes, 2);
+					else
+						Enfileirar(faixa_1, saidaes, 1);
+				}else if (ES->vet[ES->topo].dfinal == 1 && ((via1->Faixa2[0].tipov == ' ' && (defeito_v1.faixa != 2 || defeito_v1.posicao != 0)) || (via1->Faixa2[1].tipov == ' ' && (defeito_v1.faixa == 2 && defeito_v1.posicao == 0)))){
+					saidaes = ControleSaidaES(ES);
+					inserirVia_1(via1, saidaes);
+				}
+			}
+
 			if (saidav1[1].tipov != ' '){
 				fprintf(saida, "%c %d %d\n", saidav1[1].tipov, saidav1[1].nveiculo, ciclo);
 			}
@@ -501,6 +516,8 @@ int main(){
 			}
 
 			r = fgets(carro_atual, 23, (FILE*) veiculos);
+
+			verTudo(via1, faixa_1, faixa_2, ES);
 
 		}
 
