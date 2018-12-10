@@ -131,16 +131,16 @@ Carro* CicloVia_1(Via_1* x){
           x->Faixa1[j] = x->Faixa1[j+1];
         }
         if(amb1-3 >= 0){
+          iniciarCarro(&aux[0]);
           x->Faixa1[amb1-3] = x->Faixa1[amb1];
-        }else{
-          x->Faixa1[amb1].tipov = ' ';
-          x->Faixa1[amb1].nveiculo = 0;
-          x->Faixa1[amb1].origem = 0;
-          x->Faixa1[amb1].instante = 0;
-          x->Faixa1[amb1].dfinal = 0;
-          x->Faixa1[amb1].estacionamento = ' ';
-          x->Faixa1[amb1].testacionamento = 0;
         }
+        x->Faixa1[amb1].tipov = ' ';
+        x->Faixa1[amb1].nveiculo = 0;
+        x->Faixa1[amb1].origem = 0;
+        x->Faixa1[amb1].instante = 0;
+        x->Faixa1[amb1].dfinal = 0;
+        x->Faixa1[amb1].estacionamento = ' ';
+        x->Faixa1[amb1].testacionamento = 0;
         k = amb1;
         amb1 = verificarAmbulanciaFaixa1(amb1, x);
       }
@@ -181,16 +181,16 @@ Carro* CicloVia_1(Via_1* x){
           }
         }
         if(amb1-3 >= 0){
+          iniciarCarro(&aux[0]);
           x->Faixa1[amb1-3] = x->Faixa1[amb1];
-        }else{
-          x->Faixa1[amb1].tipov = ' ';
-          x->Faixa1[amb1].nveiculo = 0;
-          x->Faixa1[amb1].origem = 0;
-          x->Faixa1[amb1].instante = 0;
-          x->Faixa1[amb1].dfinal = 0;
-          x->Faixa1[amb1].estacionamento = ' ';
-          x->Faixa1[amb1].testacionamento = 0;
         }
+        x->Faixa1[amb1].tipov = ' ';
+        x->Faixa1[amb1].nveiculo = 0;
+        x->Faixa1[amb1].origem = 0;
+        x->Faixa1[amb1].instante = 0;
+        x->Faixa1[amb1].dfinal = 0;
+        x->Faixa1[amb1].estacionamento = ' ';
+        x->Faixa1[amb1].testacionamento = 0;
         k = amb1;
         amb1 = verificarAmbulanciaFaixa1(amb1, x);
       }
@@ -265,18 +265,16 @@ Carro* CicloVia_1(Via_1* x){
           
            x->Faixa2[amb2+3] = x->Faixa2[amb2];
 
-        }else{
-          if (amb2 >= 17){
-            x->Faixa2[amb2].tipov = ' ';
-            x->Faixa2[amb2].nveiculo = 0;
-            x->Faixa2[amb2].origem = 0;
-            x->Faixa2[amb2].instante = 0;
-            x->Faixa2[amb2].dfinal = 0;
-            x->Faixa2[amb2].estacionamento = ' ';
-            x->Faixa2[amb2].testacionamento = 0;
-          }
-          
         }
+         
+        x->Faixa2[amb2].tipov = ' ';
+        x->Faixa2[amb2].nveiculo = 0;
+        x->Faixa2[amb2].origem = 0;
+        x->Faixa2[amb2].instante = 0;
+        x->Faixa2[amb2].dfinal = 0;
+        x->Faixa2[amb2].estacionamento = ' ';
+        x->Faixa2[amb2].testacionamento = 0;
+        
         k = amb2;
         amb2 = verificarAmbulanciaFaixa2(amb2, x);
       }
@@ -322,18 +320,15 @@ Carro* CicloVia_1(Via_1* x){
             x->Faixa2[amb2+4] = x->Faixa2[amb2];
           }
 
-        }else{
-          if (amb2 >= 17){
-            x->Faixa2[amb2].tipov = ' ';
-            x->Faixa2[amb2].nveiculo = 0;
-            x->Faixa2[amb2].origem = 0;
-            x->Faixa2[amb2].instante = 0;
-            x->Faixa2[amb2].dfinal = 0;
-            x->Faixa2[amb2].estacionamento = ' ';
-            x->Faixa2[amb2].testacionamento = 0;
-          }
-        
         }
+        x->Faixa2[amb2].tipov = ' ';
+        x->Faixa2[amb2].nveiculo = 0;
+        x->Faixa2[amb2].origem = 0;
+        x->Faixa2[amb2].instante = 0;
+        x->Faixa2[amb2].dfinal = 0;
+        x->Faixa2[amb2].estacionamento = ' ';
+        x->Faixa2[amb2].testacionamento = 0;
+          
         k = amb2;
         amb2 = verificarAmbulanciaFaixa2(amb2, x);
       }
@@ -403,17 +398,18 @@ Carro* CicloAmb1(Via_1* x){
           x->Faixa1[j] = x->Faixa1[j+1];
         }
         if(amb1-3 >= 0){
+          iniciarCarro(&aux[0]);
           x->Faixa1[amb1-3] = x->Faixa1[amb1];
         }else{
           aux[0] = x->Faixa1[amb1];
-          x->Faixa1[amb1].tipov = ' ';
-          x->Faixa1[amb1].nveiculo = 0;
-          x->Faixa1[amb1].origem = 0;
-          x->Faixa1[amb1].instante = 0;
-          x->Faixa1[amb1].dfinal = 0;
-          x->Faixa1[amb1].estacionamento = ' ';
-          x->Faixa1[amb1].testacionamento = 0;
         }
+        x->Faixa1[amb1].tipov = ' ';
+        x->Faixa1[amb1].nveiculo = 0;
+        x->Faixa1[amb1].origem = 0;
+        x->Faixa1[amb1].instante = 0;
+        x->Faixa1[amb1].dfinal = 0;
+        x->Faixa1[amb1].estacionamento = ' ';
+        x->Faixa1[amb1].testacionamento = 0;
         k = amb1;
         amb1 = verificarAmbulanciaFaixa1(amb1, x);
       }
@@ -454,17 +450,18 @@ Carro* CicloAmb1(Via_1* x){
           }
         }
         if(amb1-3 >= 0){
+          iniciarCarro(&aux[0]);
           x->Faixa1[amb1-3] = x->Faixa1[amb1];
         }else{
           aux[0] = x->Faixa1[amb1];
-          x->Faixa1[amb1].tipov = ' ';
-          x->Faixa1[amb1].nveiculo = 0;
-          x->Faixa1[amb1].origem = 0;
-          x->Faixa1[amb1].instante = 0;
-          x->Faixa1[amb1].dfinal = 0;
-          x->Faixa1[amb1].estacionamento = ' ';
-          x->Faixa1[amb1].testacionamento = 0;
         }
+        x->Faixa1[amb1].tipov = ' ';
+        x->Faixa1[amb1].nveiculo = 0;
+        x->Faixa1[amb1].origem = 0;
+        x->Faixa1[amb1].instante = 0;
+        x->Faixa1[amb1].dfinal = 0;
+        x->Faixa1[amb1].estacionamento = ' ';
+        x->Faixa1[amb1].testacionamento = 0;
         k = amb1;
         amb1 = verificarAmbulanciaFaixa1(amb1, x);
       }
@@ -528,18 +525,15 @@ Carro* CicloAmb1(Via_1* x){
           
            x->Faixa2[amb2+3] = x->Faixa2[amb2];
 
-        }else{
-          if (amb2 >= 17){
-            x->Faixa2[amb2].tipov = ' ';
-            x->Faixa2[amb2].nveiculo = 0;
-            x->Faixa2[amb2].origem = 0;
-            x->Faixa2[amb2].instante = 0;
-            x->Faixa2[amb2].dfinal = 0;
-            x->Faixa2[amb2].estacionamento = ' ';
-            x->Faixa2[amb2].testacionamento = 0;
-          }
-          
         }
+        x->Faixa2[amb2].tipov = ' ';
+        x->Faixa2[amb2].nveiculo = 0;
+        x->Faixa2[amb2].origem = 0;
+        x->Faixa2[amb2].instante = 0;
+        x->Faixa2[amb2].dfinal = 0;
+        x->Faixa2[amb2].estacionamento = ' ';
+        x->Faixa2[amb2].testacionamento = 0;
+          
         k = amb2;
         amb2 = verificarAmbulanciaFaixa2(amb2, x);
       }
@@ -585,18 +579,15 @@ Carro* CicloAmb1(Via_1* x){
             x->Faixa2[amb2+4] = x->Faixa2[amb2];
           }
 
-        }else{
-          if (amb2 >= 17){
-            x->Faixa2[amb2].tipov = ' ';
-            x->Faixa2[amb2].nveiculo = 0;
-            x->Faixa2[amb2].origem = 0;
-            x->Faixa2[amb2].instante = 0;
-            x->Faixa2[amb2].dfinal = 0;
-            x->Faixa2[amb2].estacionamento = ' ';
-            x->Faixa2[amb2].testacionamento = 0;
-          }
-        
         }
+        x->Faixa2[amb2].tipov = ' ';
+        x->Faixa2[amb2].nveiculo = 0;
+        x->Faixa2[amb2].origem = 0;
+        x->Faixa2[amb2].instante = 0;
+        x->Faixa2[amb2].dfinal = 0;
+        x->Faixa2[amb2].estacionamento = ' ';
+        x->Faixa2[amb2].testacionamento = 0;
+         
         k = amb2;
         amb2 = verificarAmbulanciaFaixa2(amb2, x);
       }
