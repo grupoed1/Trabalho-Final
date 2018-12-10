@@ -60,6 +60,7 @@ void entrarEngarrafamento(Engarrafamento* f,Carro c){
         f->fim->prox= novo; 
     }
     f->fim=novo;
+
     printf("\nponto 1\n");   ////////////PONTO 1
 }
 
@@ -139,6 +140,8 @@ void atualizarEngarrafamento(Engarrafamento* f){
 					aux->prox=f->inicio;
 					f->inicio=aux;
 					atual=f->inicio;
+					if (f->fim == aux)
+						f->fim = anterior;
 					break;
 				}
 				anterior=anterior->prox;
