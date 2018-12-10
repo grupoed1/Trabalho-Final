@@ -119,16 +119,17 @@ void verEngarrafamento(Engarrafamento* f){
 }
 
 void atualizarEngarrafamento(Engarrafamento* f){
-	CarroE* atual;
-	CarroE* aux;
-	CarroE* anterior;
+	CarroE* atual = (CarroE*) malloc(sizeof(CarroE));
+	CarroE* aux = (CarroE*) malloc(sizeof(CarroE));
+	CarroE* anterior = (CarroE*) malloc(sizeof(CarroE));
 	atual=f->inicio;
-	
+
+
 	while(atual!=NULL){
 		if(atual->tipov=='C'){
 			anterior=atual;
 			
-			while(anterior->prox->tipov=='A' || anterior==NULL){
+			while(anterior==NULL || (anterior->prox != NULL && anterior->prox->tipov=='A')){
 				if(anterior==NULL){
 					return;
 				}
