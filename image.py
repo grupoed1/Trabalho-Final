@@ -1,7 +1,12 @@
+#!/usr/bin/env python
+
 import Tkinter as tk
 from PIL import ImageTk, Image
 import subprocess
 import os
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+os.chdir(dir_path)
 
 def answer():
 	subprocess.call("./main", shell = True)
