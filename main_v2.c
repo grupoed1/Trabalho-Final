@@ -90,12 +90,15 @@ int main(){
 	fclose(veiculos);
 	lista_v[fsize2] = 0;
 	int mark2 = 0;
+	int mark2_f = mark2;
 
 
 		while(mark2 < strlen(lista_v) || Qtecarros(faixa_1) != 0 || Qtecarros(faixa_2) != 0 || Qtecarros1(via1, 1) != 0 || Qtecarros1(via1, 2) != 0 || ES->vet[ES->topo].tipov != ' '){
 			ciclo++;
 			saidav2_1 = Desenfileirar(faixa_1, 1);
 			saidav2_2 = Desenfileirar(faixa_2, 2);
+			if (mark2 > strlen(lista_v))
+				mark2_f = mark2;
 			flag1 = 0;
 			flag2 = 0;
 			evento_f = 0;
@@ -250,6 +253,8 @@ int main(){
 					novo.testacionamento = 0;
 				}else{
 					mark2 = i;
+					if (mark2 < strlen(lista_v))
+						mark2_f = mark2;
 				}
 			}
 
@@ -304,11 +309,11 @@ int main(){
 						}
 					}
 				}
-				if (mark2 < strlen(lista_v) && novo.origem == 1){
+				if (mark2_f < strlen(lista_v) && novo.origem == 1){
 					entrarEngarrafamento(EN1, novo);
 				}
 			}else{
-				if (mark2 < strlen(lista_v) && novo.origem == 1){
+				if (mark2_f < strlen(lista_v) && novo.origem == 1){
 					if (novo.tipov == 'A')
 						inserirVia_1(via1, novo);
 					else if (novo.estacionamento == 'N' && novo.dfinal == 1){
@@ -361,9 +366,9 @@ int main(){
 					}
 				}
 			}
-			if (mark2 < strlen(lista_v) && novo.origem == 1)
+			if (mark2_f < strlen(lista_v) && novo.origem == 1)
 				flag1 = 1;
-			if (mark2 < strlen(lista_v) && novo.origem == 2)
+			if (mark2_f < strlen(lista_v) && novo.origem == 2)
 				flag2 = 1;
 			if (saidav1[0].estacionamento == 'S' && p == -1){
 				ControleEntradaES(ES, &saidaen1, &saidav1[0]);
@@ -377,12 +382,12 @@ int main(){
 
 			if (saidaen2.dfinal == 1 || saidaen2.dfinal == 2){
 				inserirVia_1(via1, saidaen2);
-				if ((mark2 < strlen(lista_v) && novo.origem == 2 && novo.tipov == 'C') || (mark2 < strlen(lista_v) && novo.tipov == 'A' && novo.origem == 2 && via1->Faixa1[20].tipov != ' ')){
+				if ((mark2_f < strlen(lista_v) && novo.origem == 2 && novo.tipov == 'C') || (mark2_f < strlen(lista_v) && novo.tipov == 'A' && novo.origem == 2 && via1->Faixa1[20].tipov != ' ')){
 					entrarEngarrafamento(EN2, novo);
-				}else if (mark2 < strlen(lista_v) && novo.tipov == 'A' && novo.origem == 2)
+				}else if (mark2_f < strlen(lista_v) && novo.tipov == 'A' && novo.origem == 2)
 					inserirVia_1(via1, novo);
 			}else{
-				if (mark2 < strlen(lista_v) && novo.origem == 2){
+				if (mark2_f < strlen(lista_v) && novo.origem == 2){
 					if (novo.tipov == 'C' || via1->Faixa1[20].tipov == ' ')
 						inserirVia_1(via1, novo);
 					else
