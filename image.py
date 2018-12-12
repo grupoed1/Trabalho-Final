@@ -13,19 +13,19 @@ def callback(n):
 	name = askopenfilename()
 	file = open(name, 'r')
 	x = file.read()
+	if n == 1:
+		buff = 'veiculos.txt'
+	elif n == 2:
+		buff = 'eventos.txt'
+	file_d = open(buff, 'r+')
+	file_d.truncate(0)
 	if len(x) > 1:
-		if n == 1:
-			buff = 'veiculos.txt'
-		elif n == 2:
-			buff = 'eventos.txt'
-		file_d = open(buff, 'r+')
-		file_d.truncate(0)
 		file_d = open(buff, 'w')
 		file_d.write(x)
 	file.close()
 
 def answer():
-	subprocess.call("./main", shell = True)
+	subprocess.call("./main_v2", shell = True)
 	os.system("open saida.txt")
 
 path = "interface2.png"
