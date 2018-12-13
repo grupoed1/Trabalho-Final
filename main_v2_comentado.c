@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "via_1.h"
 #include "estacionamento.h"
 
@@ -565,6 +566,6 @@ int main(){
 
 		}
 
-	
+	usleep(1000000);
 	return 0;
 }
